@@ -9,5 +9,14 @@
   "arrowParens": "always",
   "endOfLine": "lf",
   "singleAttributePerLine": true,
-  "plugins": ["@trivago/prettier-plugin-sort-imports"]
+  "plugins": ["prettier-plugin-organize-imports"],
+  "organizeImportsSkipDestructiveCodeActions": true,
+  "importOrder": [
+    "^@core/(.*)$",
+    "^@/config/(.*)$",
+    "^@/shared/(.*)$",
+    "^@/utils/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true
 }
