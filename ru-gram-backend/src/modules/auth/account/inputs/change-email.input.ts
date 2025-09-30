@@ -1,18 +1,13 @@
 import { IsPassword } from '@/shared/decorators/is-password.decorator';
-import { IsUsername } from '@/shared/decorators/is-username.decorator';
 import { Field, InputType } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
 @InputType()
-export class CreateUserInput {
+export class ChangeEmailInput {
   @Field(() => String)
   @IsEmail()
   @IsNotEmpty()
-  email: string;
-
-  @Field(() => String)
-  @IsUsername()
-  username: string;
+  newEmail: string;
 
   @Field(() => String)
   @IsPassword()
