@@ -7,7 +7,6 @@
   "printWidth": 80,
   "tabWidth": 2,
   "arrowParens": "always",
-  "endOfLine": "lf",
   "singleAttributePerLine": true,
   "plugins": ["prettier-plugin-organize-imports"],
   "organizeImportsSkipDestructiveCodeActions": true,
@@ -18,5 +17,6 @@
     "^@/utils/(.*)$",
     "^[./]"
   ],
-  "importOrderSeparation": true
+  "importOrderSeparation": true,
+  "endOfLine": "auto"
 }
