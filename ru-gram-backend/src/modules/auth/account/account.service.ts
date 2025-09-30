@@ -1,6 +1,11 @@
 import { PrismaService } from '@/core/prisma/prisma.service';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { hash } from 'argon2';
+import { ChangeRoleInput } from './inputs/change-role.input';
 import { CreateUserInput } from './inputs/create-user.input';
 
 @Injectable()
@@ -10,6 +15,29 @@ export class AccountService {
   public async findAll() {
     const users = await this.prisma.user.findMany();
     return users;
+  }
+
+  public async me(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    return user;
+  }
+
+  public async changeRole(changeRoleInput: ChangeRoleInput) {
+    const { id, role } = changeRoleInput;
+
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { role },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден');
+    }
+
+    return user;
   }
 
   public async create(createUserInput: CreateUserInput) {

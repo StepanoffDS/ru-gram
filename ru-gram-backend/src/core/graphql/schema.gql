@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input ChangeRoleInput {
+  id: String!
+  role: String!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
@@ -19,6 +24,7 @@ input LoginInput {
 }
 
 type Mutation {
+  changeRole(data: ChangeRoleInput!): UserModel!
   createUser(data: CreateUserInput!): UserModel!
   loginUser(data: LoginInput!): UserModel!
   logoutUser: String!
@@ -26,6 +32,7 @@ type Mutation {
 
 type Query {
   findAllUsers: [UserModel!]!
+  findMe: UserModel!
 }
 
 type UserModel {
