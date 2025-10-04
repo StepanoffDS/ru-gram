@@ -1,3 +1,4 @@
+import { Auth } from '@/shared/decorators/auth.decorator';
 import { Authorized } from '@/shared/decorators/authorized.decorator';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
@@ -50,6 +51,7 @@ export class PostsResolver {
     return this.postsService.getLikedUsersByPost(postId, paginationInput);
   }
 
+  @Auth()
   @Mutation(() => PostModel, { name: 'createPost' })
   public async createPost(
     @Authorized('id') userId: string,
@@ -58,6 +60,7 @@ export class PostsResolver {
     return this.postsService.create(userId, createPostInput);
   }
 
+  @Auth()
   @Mutation(() => PostModel, { name: 'updatePost' })
   public async updatePost(
     @Args('id') id: string,
@@ -67,6 +70,7 @@ export class PostsResolver {
     return this.postsService.update(id, userId, updatePostInput);
   }
 
+  @Auth()
   @Mutation(() => Boolean, { name: 'deletePost' })
   public async deletePost(
     @Args('id') id: string,
@@ -75,6 +79,7 @@ export class PostsResolver {
     return this.postsService.delete(id, userId);
   }
 
+  @Auth()
   @Mutation(() => LikeResponseModel, { name: 'toggleLikePost' })
   public async toggleLikePost(
     @Args('postId') postId: string,
@@ -83,6 +88,7 @@ export class PostsResolver {
     return this.postsService.toggleLike(postId, userId);
   }
 
+  @Auth()
   @Mutation(() => PostModel, { name: 'toggleHidePost' })
   public async toggleHidePost(
     @Args('postId') postId: string,
@@ -91,6 +97,7 @@ export class PostsResolver {
     return this.postsService.toggleHide(postId, userId);
   }
 
+  @Auth()
   @Mutation(() => AddImageResponseModel, { name: 'addImageToPost' })
   public async addImageToPost(
     @Args('postId') postId: string,
@@ -100,6 +107,7 @@ export class PostsResolver {
     return this.postsService.addImageToPost(postId, userId, file);
   }
 
+  @Auth()
   @Mutation(() => RemoveImageResponseModel, { name: 'removeImageFromPost' })
   public async removeImageFromPost(
     @Args('postId') postId: string,
@@ -109,6 +117,7 @@ export class PostsResolver {
     return this.postsService.removeImageFromPost(postId, userId, imageUrl);
   }
 
+  @Auth()
   @Mutation(() => UpdateImagesResponseModel, { name: 'updatePostImages' })
   public async updatePostImages(
     @Args('postId') postId: string,
