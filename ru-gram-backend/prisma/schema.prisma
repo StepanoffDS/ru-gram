@@ -14,7 +14,11 @@ datasource db {
   url      = env("POSTGRES_URI")
 }
 
-// TODO: добавить роли
+enum Role {
+  ADMIN
+  USER
+}
+
 model User {
   id String @id @default(uuid())
 
@@ -30,14 +34,10 @@ model User {
   avatar String?
   bio    String?
 
-  posts Post[]
+  posts     Post[]
+  postLikes PostLike[]
 
   @@map("users")
-}
-
-enum Role {
-  ADMIN
-  USER
 }
 
 model Post {
@@ -46,15 +46,33 @@ model Post {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  title    String
-  content  String
-  imageUrl String? @map("image_url")
+  title  String?
+  text   String?
+  images String[]
+  hidden Boolean  @default(false)
 
-  likes    Int @default(0)
-  dislikes Int @default(0)
+  likes Int @default(0)
 
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String? @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  postLikes PostLike[]
 
   @@map("posts")
+}
+
+model PostLike {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userId String @map("user_id")
+  postId String @map("post_id")
+
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
+  @@map("post_likes")
 }

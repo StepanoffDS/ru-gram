@@ -7,19 +7,69 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { hash, verify } from 'argon2';
-import { type User } from 'prisma/generated';
+import { Role, type Prisma, type User } from 'prisma/generated';
 import { ChangeEmailInput } from './inputs/change-email.input';
 import { ChangePasswordInput } from './inputs/change-password.input';
 import { ChangeRoleInput } from './inputs/change-role.input';
 import { CreateUserInput } from './inputs/create-user.input';
+import { FilterUsersInput } from './inputs/filter.input';
 
 @Injectable()
 export class AccountService {
   public constructor(private readonly prismaService: PrismaService) {}
 
-  public async findAll() {
-    const users = await this.prismaService.user.findMany();
+  public async findAll(filterUsersInput: FilterUsersInput = {}) {
+    const { take, skip, searchTerm } = filterUsersInput;
+
+    const whereClause = searchTerm
+      ? this.findBySearchTermFilter(searchTerm)
+      : undefined;
+
+    const users = await this.prismaService.user.findMany({
+      take: take ?? 15,
+      skip: skip ?? 0,
+      where: {
+        ...whereClause,
+      },
+    });
+
     return users;
+  }
+
+  private findBySearchTermFilter(searchTerm: string): Prisma.UserWhereInput {
+    return {
+      OR: [
+        {
+          email: {
+            contains: searchTerm,
+            mode: 'insensitive',
+          },
+        },
+        {
+          username: {
+            contains: searchTerm,
+            mode: 'insensitive',
+          },
+        },
+        {
+          name: {
+            contains: searchTerm,
+            mode: 'insensitive',
+          },
+        },
+        {
+          bio: {
+            contains: searchTerm,
+            mode: 'insensitive',
+          },
+        },
+        {
+          role: {
+            equals: searchTerm as Role,
+          },
+        },
+      ],
+    };
   }
 
   public async me(id: string) {

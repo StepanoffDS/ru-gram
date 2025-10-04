@@ -35,6 +35,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input FilterPostsInput {
+  searchTerm: String
+  skip: Int
+  take: Int
+}
+
+input FilterUsersInput {
+  searchTerm: String
+  skip: Int
+  take: Int
+}
+
 input LoginInput {
   login: String!
   password: String!
@@ -52,8 +64,33 @@ type Mutation {
   updateProfileAvatar(avatar: Upload!): Boolean!
 }
 
+type PostLikesModel {
+  createdAt: DateTime!
+  id: ID!
+  post: PostModel!
+  postId: String!
+  updatedAt: DateTime!
+  user: UserModel!
+  userId: String!
+}
+
+type PostModel {
+  createdAt: DateTime!
+  hidden: Boolean!
+  id: ID!
+  images: [String!]
+  likes: Int!
+  postLikes: [PostLikesModel!]!
+  text: String
+  title: String
+  updatedAt: DateTime!
+  user: UserModel!
+  userId: String!
+}
+
 type Query {
-  findAllUsers: [UserModel!]!
+  findAllPosts(filter: FilterPostsInput!): [PostModel!]!
+  findAllUsers(filter: FilterUsersInput!): [UserModel!]!
   findMe: UserModel!
 }
 
@@ -61,13 +98,15 @@ type Query {
 scalar Upload
 
 type UserModel {
-  avatarUrl: String
+  avatar: String
   bio: String
   createdAt: DateTime!
   email: String!
   id: ID!
   name: String
   password: String!
+  postLikes: [PostLikesModel!]!
+  posts: [PostModel!]!
   role: String!
   updatedAt: DateTime!
   username: String!

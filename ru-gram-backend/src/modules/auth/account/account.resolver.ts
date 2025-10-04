@@ -8,6 +8,7 @@ import { ChangeEmailInput } from './inputs/change-email.input';
 import { ChangePasswordInput } from './inputs/change-password.input';
 import { ChangeRoleInput } from './inputs/change-role.input';
 import { CreateUserInput } from './inputs/create-user.input';
+import { FilterUsersInput } from './inputs/filter.input';
 import { UserModel } from './models/user.model';
 
 @Resolver('Account')
@@ -17,8 +18,8 @@ export class AccountResolver {
   @Auth()
   @RolesAuth(Role.ADMIN)
   @Query(() => [UserModel], { name: 'findAllUsers' })
-  public async findAll() {
-    return await this.accountService.findAll();
+  public async findAll(@Args('filter') filterUsersInput: FilterUsersInput) {
+    return await this.accountService.findAll(filterUsersInput);
   }
 
   @Auth()
