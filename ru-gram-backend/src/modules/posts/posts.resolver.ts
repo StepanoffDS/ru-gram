@@ -1,9 +1,16 @@
 import { Authorized } from '@/shared/decorators/authorized.decorator';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import * as Upload from 'graphql-upload/Upload.js';
 import { CreatePostInput } from './inputs/create-post.input';
 import { FilterPostsInput } from './inputs/filter.input';
 import { LikesPaginationInput } from './inputs/likes-pagination.input';
 import { UpdatePostInput } from './inputs/update-post.input';
+import {
+  AddImageResponseModel,
+  RemoveImageResponseModel,
+  UpdateImagesResponseModel,
+} from './models/image-response.model';
 import { LikeResponseModel } from './models/like-response.model';
 import { PaginatedLikedUsersModel } from './models/liked-users.model';
 import { PostModel } from './models/post.model';
@@ -82,5 +89,32 @@ export class PostsResolver {
     @Authorized('id') userId: string,
   ) {
     return this.postsService.toggleHide(postId, userId);
+  }
+
+  @Mutation(() => AddImageResponseModel, { name: 'addImageToPost' })
+  public async addImageToPost(
+    @Args('postId') postId: string,
+    @Authorized('id') userId: string,
+    @Args('file', { type: () => GraphQLUpload }) file: Upload,
+  ) {
+    return this.postsService.addImageToPost(postId, userId, file);
+  }
+
+  @Mutation(() => RemoveImageResponseModel, { name: 'removeImageFromPost' })
+  public async removeImageFromPost(
+    @Args('postId') postId: string,
+    @Args('imageUrl') imageUrl: string,
+    @Authorized('id') userId: string,
+  ) {
+    return this.postsService.removeImageFromPost(postId, userId, imageUrl);
+  }
+
+  @Mutation(() => UpdateImagesResponseModel, { name: 'updatePostImages' })
+  public async updatePostImages(
+    @Args('postId') postId: string,
+    @Authorized('id') userId: string,
+    @Args('files', { type: () => [GraphQLUpload] }) files: Upload[],
+  ) {
+    return this.postsService.updatePostImages(postId, userId, files);
   }
 }
