@@ -27,8 +27,8 @@ model User {
   password String
   role     Role    @default(USER)
 
-  avatarUrl String? @map("avatar_url")
-  bio       String?
+  avatar String?
+  bio    String?
 
   posts Post[]
 

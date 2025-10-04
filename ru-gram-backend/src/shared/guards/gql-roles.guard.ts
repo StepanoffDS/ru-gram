@@ -14,7 +14,7 @@ import { Role } from 'prisma/generated';
 export class GqlRolesGuard implements CanActivate {
   public constructor(
     private readonly reflector: Reflector,
-    private readonly prisma: PrismaService,
+    private readonly prismaService: PrismaService,
   ) {}
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -42,7 +42,7 @@ export class GqlRolesGuard implements CanActivate {
         throw new ForbiddenException('Доступ запрещён');
       }
 
-      const user = await this.prisma.user.findUnique({
+      const user = await this.prismaService.user.findUnique({
         where: { id: userId },
         select: { role: true },
       });

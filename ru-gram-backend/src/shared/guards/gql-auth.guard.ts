@@ -9,7 +9,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class GqlAuthGuard implements CanActivate {
-  public constructor(private readonly prisma: PrismaService) {}
+  public constructor(private readonly prismaService: PrismaService) {}
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
@@ -19,7 +19,7 @@ export class GqlAuthGuard implements CanActivate {
       throw new UnauthorizedException('Пользователь не авторизован');
     }
 
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         id: req.session.userId,
       },

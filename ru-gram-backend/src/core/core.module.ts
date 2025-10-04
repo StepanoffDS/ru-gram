@@ -1,5 +1,7 @@
 import { AccountModule } from '@/modules/auth/account/account.module';
+import { ProfileModule } from '@/modules/auth/profile/profile.module';
 import { SessionModule } from '@/modules/auth/session/session.module';
+import { StorageModule } from '@/modules/libs/storage/storage.module';
 import { IS_DEV_ENV } from '@/shared/utils/is-dev.util';
 import { ApolloDriver } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
@@ -23,8 +25,10 @@ import { RedisModule } from './redis/redis.module';
     }),
     PrismaModule,
     RedisModule,
+    StorageModule,
     AccountModule,
     SessionModule,
+    ProfileModule,
   ],
 })
 export class CoreModule {}

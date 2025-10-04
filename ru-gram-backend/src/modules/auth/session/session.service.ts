@@ -13,14 +13,14 @@ import { LoginInput } from './inputs/login.input';
 @Injectable()
 export class SessionService {
   public constructor(
-    private readonly prisma: PrismaService,
+    private readonly prismaService: PrismaService,
     private readonly config: ConfigService,
   ) {}
 
   public async login(req: Request, loginInput: LoginInput) {
     const { login, password } = loginInput;
 
-    const user = await this.prisma.user.findFirst({
+    const user = await this.prismaService.user.findFirst({
       where: {
         OR: [{ username: login }, { email: login }],
       },

@@ -15,15 +15,15 @@ import { CreateUserInput } from './inputs/create-user.input';
 
 @Injectable()
 export class AccountService {
-  public constructor(private readonly prisma: PrismaService) {}
+  public constructor(private readonly prismaService: PrismaService) {}
 
   public async findAll() {
-    const users = await this.prisma.user.findMany();
+    const users = await this.prismaService.user.findMany();
     return users;
   }
 
   public async me(id: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: { id },
     });
 
@@ -33,7 +33,7 @@ export class AccountService {
   public async changeRole(changeRoleInput: ChangeRoleInput) {
     const { id, role } = changeRoleInput;
 
-    const user = await this.prisma.user.update({
+    const user = await this.prismaService.user.update({
       where: { id },
       data: { role },
     });
@@ -48,7 +48,7 @@ export class AccountService {
   public async create(createUserInput: CreateUserInput) {
     const { email, username, password } = createUserInput;
 
-    const isUsernameExists = await this.prisma.user.findUnique({
+    const isUsernameExists = await this.prismaService.user.findUnique({
       where: { username },
     });
 
@@ -56,7 +56,7 @@ export class AccountService {
       throw new BadRequestException('Данный username уже занят');
     }
 
-    const isEmailExists = await this.prisma.user.findUnique({
+    const isEmailExists = await this.prismaService.user.findUnique({
       where: { email },
     });
 
@@ -64,7 +64,7 @@ export class AccountService {
       throw new BadRequestException('Данный email уже занят');
     }
 
-    const user = await this.prisma.user.create({
+    const user = await this.prismaService.user.create({
       data: { email, username, password: await hash(password) },
     });
 
@@ -74,7 +74,7 @@ export class AccountService {
   public async changeEmail(user: User, changeEmailInput: ChangeEmailInput) {
     const { newEmail, password } = changeEmailInput;
 
-    const isUserExists = await this.prisma.user.findUnique({
+    const isUserExists = await this.prismaService.user.findUnique({
       where: { id: user.id },
     });
 
@@ -88,7 +88,7 @@ export class AccountService {
       throw new UnauthorizedException('Неверный пароль');
     }
 
-    const updatedUser = await this.prisma.user.update({
+    const updatedUser = await this.prismaService.user.update({
       where: { id: user.id },
       data: { email: newEmail },
     });
@@ -125,7 +125,7 @@ export class AccountService {
       throw new BadRequestException('Новые пароли не совпадают');
     }
 
-    const updatedUser = await this.prisma.user.update({
+    const updatedUser = await this.prismaService.user.update({
       where: { id: user.id },
       data: { password: await hash(newPassword) },
     });
