@@ -2,7 +2,10 @@ import { Authorized } from '@/shared/decorators/authorized.decorator';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreatePostInput } from './inputs/create-post.input';
 import { FilterPostsInput } from './inputs/filter.input';
+import { LikesPaginationInput } from './inputs/likes-pagination.input';
 import { UpdatePostInput } from './inputs/update-post.input';
+import { LikeResponseModel } from './models/like-response.model';
+import { PaginatedLikedUsersModel } from './models/liked-users.model';
 import { PostModel } from './models/post.model';
 import { PostsService } from './posts.service';
 
@@ -11,8 +14,11 @@ export class PostsResolver {
   constructor(private readonly postsService: PostsService) {}
 
   @Query(() => [PostModel], { name: 'findAllPosts' })
-  public async findAll(@Args('filter') filterPostsInput: FilterPostsInput) {
-    return this.postsService.findAll(filterPostsInput);
+  public async findAll(
+    @Args('filter') filterPostsInput: FilterPostsInput,
+    @Authorized('id') userId?: string,
+  ) {
+    return this.postsService.findAll(filterPostsInput, userId);
   }
 
   @Query(() => PostModel, { name: 'findOneById' })
@@ -26,6 +32,15 @@ export class PostsResolver {
     @Args('filter') filterPostsInput: FilterPostsInput,
   ) {
     return this.postsService.findAllByUsername(username, filterPostsInput);
+  }
+
+  @Query(() => PaginatedLikedUsersModel, { name: 'getLikedUsersByPost' })
+  public async getLikedUsersByPost(
+    @Args('postId') postId: string,
+    @Args('pagination', { defaultValue: { skip: 0, take: 20 } })
+    paginationInput: LikesPaginationInput,
+  ) {
+    return this.postsService.getLikedUsersByPost(postId, paginationInput);
   }
 
   @Mutation(() => PostModel, { name: 'createPost' })
@@ -51,5 +66,21 @@ export class PostsResolver {
     @Authorized('id') userId: string,
   ) {
     return this.postsService.delete(id, userId);
+  }
+
+  @Mutation(() => LikeResponseModel, { name: 'toggleLikePost' })
+  public async toggleLikePost(
+    @Args('postId') postId: string,
+    @Authorized('id') userId: string,
+  ) {
+    return this.postsService.toggleLike(postId, userId);
+  }
+
+  @Mutation(() => PostModel, { name: 'toggleHidePost' })
+  public async toggleHidePost(
+    @Args('postId') postId: string,
+    @Authorized('id') userId: string,
+  ) {
+    return this.postsService.toggleHide(postId, userId);
   }
 }
