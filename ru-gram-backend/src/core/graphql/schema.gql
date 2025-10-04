@@ -24,6 +24,12 @@ input ChangeRoleInput {
   role: String!
 }
 
+input CreatePostInput {
+  images: [String!]!
+  text: String!
+  title: String!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
@@ -57,10 +63,13 @@ type Mutation {
   changePassword(data: ChangePasswordInput!): Boolean!
   changeProfileInfo(data: ChangeProfileInfoInput!): Boolean!
   changeRole(data: ChangeRoleInput!): UserModel!
+  createPost(data: CreatePostInput!): PostModel!
   createUser(data: CreateUserInput!): UserModel!
+  deletePost(id: String!): Boolean!
   loginUser(data: LoginInput!): UserModel!
   logoutUser: String!
   removeProfileAvatar: Boolean!
+  updatePost(data: UpdatePostInput!, id: String!): PostModel!
   updateProfileAvatar(avatar: Upload!): Boolean!
 }
 
@@ -89,9 +98,18 @@ type PostModel {
 }
 
 type Query {
+  findAllByUsername(filter: FilterPostsInput!, username: String!): [PostModel!]!
   findAllPosts(filter: FilterPostsInput!): [PostModel!]!
   findAllUsers(filter: FilterUsersInput!): [UserModel!]!
   findMe: UserModel!
+  findOneById(id: String!): PostModel!
+}
+
+input UpdatePostInput {
+  hidden: Boolean!
+  images: [String!]!
+  text: String!
+  title: String!
 }
 
 """The `Upload` scalar type represents a file upload."""

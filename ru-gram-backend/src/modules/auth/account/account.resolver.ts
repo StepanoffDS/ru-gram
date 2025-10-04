@@ -23,6 +23,12 @@ export class AccountResolver {
   }
 
   @Auth()
+  @Query(() => UserModel, { name: 'findOneById' })
+  public async findOneById(@Args('id') id: string) {
+    return await this.accountService.findOneById(id);
+  }
+
+  @Auth()
   @Query(() => UserModel, { name: 'findMe' })
   public async me(@Authorized('id') id: string) {
     return await this.accountService.me(id);

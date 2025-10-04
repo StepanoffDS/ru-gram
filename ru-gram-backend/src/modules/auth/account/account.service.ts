@@ -72,6 +72,25 @@ export class AccountService {
     };
   }
 
+  public async findOneById(id: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: { id },
+      include: {
+        posts: true,
+        postLikes: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = user;
+
+    return userWithoutPassword;
+  }
+
   public async me(id: string) {
     const user = await this.prismaService.user.findUnique({
       where: { id },
