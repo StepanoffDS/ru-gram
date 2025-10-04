@@ -34,6 +34,9 @@ export class PostsService {
       include: {
         user: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     if (userId) {
@@ -122,6 +125,9 @@ export class PostsService {
       },
       take: take ?? 15,
       skip: skip ?? 0,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     return posts;
