@@ -24,8 +24,9 @@ export class PostsResolver {
   @Query(() => [PostModel], { name: 'findAllPosts' })
   public async findAll(
     @Args('filter') filterPostsInput: FilterPostsInput,
-    @Authorized('id') userId?: string,
+    @Authorized() user?: any,
   ) {
+    const userId = user?.id;
     return this.postsService.findAll(filterPostsInput, userId);
   }
 

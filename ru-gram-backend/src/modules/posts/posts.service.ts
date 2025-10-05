@@ -144,6 +144,14 @@ export class PostsService {
   }
 
   public async create(userId: string, createPostInput: CreatePostInput) {
+    const { title, text, images } = createPostInput;
+
+    console.log(' =>', title, text, images);
+
+    if (!title && !text && (!images || images.length === 0)) {
+      throw new BadRequestException('Пост не может быть пустым');
+    }
+
     const post = await this.prismaService.post.create({
       data: {
         ...createPostInput,

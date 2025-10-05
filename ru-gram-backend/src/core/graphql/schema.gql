@@ -30,9 +30,9 @@ input ChangeRoleInput {
 }
 
 input CreatePostInput {
-  images: [String!]!
-  text: String!
-  title: String!
+  images: [String!]
+  text: String
+  title: String
 }
 
 input CreateUserInput {
