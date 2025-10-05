@@ -42,11 +42,10 @@ export class PostsService {
         user: true,
       },
       orderBy: {
-        id: 'asc', // Используем id для стабильной сортировки перед рандомизацией
+        id: 'asc',
       },
     });
 
-    // Перемешиваем массив постов в случайном порядке
     const shuffledPosts = this.shuffleArray(posts);
 
     if (userId) {
@@ -136,7 +135,7 @@ export class PostsService {
       take: take ?? 15,
       skip: skip ?? 0,
       orderBy: {
-        id: 'asc', // Используем id для стабильной сортировки перед рандомизацией
+        id: 'asc',
       },
     });
 
@@ -145,8 +144,6 @@ export class PostsService {
 
   public async create(userId: string, createPostInput: CreatePostInput) {
     const { title, text, images } = createPostInput;
-
-    console.log(' =>', title, text, images);
 
     if (!title && !text && (!images || images.length === 0)) {
       throw new BadRequestException('Пост не может быть пустым');
