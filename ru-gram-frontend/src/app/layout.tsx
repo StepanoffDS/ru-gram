@@ -1,4 +1,5 @@
-import { ApolloClientProvider } from '@/providers/ApolloClientProvider';
+import { ApolloClientProvider } from '@/providers/apollo-client-provider';
+import { ThemeProvider } from '@/providers/theme-provider';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
@@ -35,7 +36,13 @@ export default async function RootLayout({
       >
         <ApolloClientProvider>
           <NextIntlClientProvider messages={messages}>
-            {children}
+            <ThemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+            >
+              {children}
+            </ThemeProvider>
           </NextIntlClientProvider>
         </ApolloClientProvider>
       </body>
