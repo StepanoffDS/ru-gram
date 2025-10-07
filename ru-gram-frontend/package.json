@@ -3,20 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "graphql-codegen --config graphql.config.ts && next dev --turbopack",
+    "build": "graphql-codegen --config graphql.config.ts && next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "codegen": "graphql-codegen --config graphql.config.ts"
   },
   "dependencies": {
+    "@apollo/client": "^3.9.0",
     "@graphql-codegen/cli": "^6.0.0",
+    "@graphql-codegen/typescript": "^5.0.1",
+    "@graphql-codegen/typescript-operations": "^5.0.1",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.3",
     "graphql": "^16.11.0",
     "lucide-react": "^0.544.0",
     "next": "15.5.4",
+    "next-intl": "^4.3.9",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "rxjs": "^7.8.1",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
