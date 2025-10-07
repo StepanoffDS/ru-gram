@@ -1,5 +1,6 @@
 import { ApolloClientProvider } from '@/providers/apollo-client-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
+import { Toaster } from '@/shared/components/ui/sonner';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
@@ -30,7 +31,10 @@ export default async function RootLayout({
   const messages = (await getMessages()) as Record<string, string>;
 
   return (
-    <html lang={locale}>
+    <html
+      lang={locale}
+      suppressHydrationWarning
+    >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -42,6 +46,7 @@ export default async function RootLayout({
               enableSystem
             >
               {children}
+              <Toaster />
             </ThemeProvider>
           </NextIntlClientProvider>
         </ApolloClientProvider>

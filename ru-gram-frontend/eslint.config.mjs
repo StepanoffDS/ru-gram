@@ -21,6 +21,11 @@ const eslintConfig = [
       'src/graphql/generated/**/*.ts',
     ],
   },
+  {
+    rules: {
+      '@typescript-eslint/no-empty-object-type': 'warn',
+    },
+  },
 ];
 
 export default eslintConfig;

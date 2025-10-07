@@ -88,7 +88,7 @@ type Mutation {
   changeProfileInfo(data: ChangeProfileInfoInput!): Boolean!
   changeRole(data: ChangeRoleInput!): UserModel!
   createPost(data: CreatePostInput!): PostModel!
-  createUser(data: CreateUserInput!): UserModel!
+  createUser(data: CreateUserInput!): Boolean!
   deletePost(id: String!): Boolean!
   loginUser(data: LoginInput!): UserModel!
   logoutUser: String!

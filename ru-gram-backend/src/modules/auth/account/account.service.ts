@@ -137,7 +137,11 @@ export class AccountService {
       data: { email, username, password: await hash(password) },
     });
 
-    return user;
+    if (!user) {
+      throw new InternalServerErrorException('Не удалось создать пользователя');
+    }
+
+    return true;
   }
 
   public async changeEmail(user: User, changeEmailInput: ChangeEmailInput) {
