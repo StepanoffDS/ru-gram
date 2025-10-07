@@ -12,6 +12,7 @@ import {
 } from '@/shared/components/ui/tooltip';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { HelpCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { AuthWrapper } from '../auth-wrapper';
@@ -23,6 +24,7 @@ import { FieldWrapper } from '../ui/field-wrapper';
 import { FormWrapper } from '../ui/form-wrapper';
 
 export function CreateAccountForm() {
+  const t = useTranslations('auth.register');
   const form = useForm<CreateAccountSchema>({
     resolver: zodResolver(createAccountSchema),
     defaultValues: {
@@ -35,10 +37,10 @@ export function CreateAccountForm() {
 
   const [createUser, { loading: isLoadingCreate }] = useCreateUserMutation({
     onCompleted: () => {
-      toast.success('Успешная регистрация');
+      toast.success(t('successMessage'));
     },
     onError: () => {
-      toast.error('Не удалось зарегистрироваться');
+      toast.error(t('errorMessage'));
     },
   });
 
@@ -48,8 +50,8 @@ export function CreateAccountForm() {
 
   return (
     <AuthWrapper
-      heading='Регистрация'
-      backButtonLabel='Есть аккаунт? Войти'
+      heading={t('heading')}
+      backButtonLabel={t('backButtonLabel')}
       backButtonHref='/login'
     >
       <Form {...form}>
@@ -76,7 +78,7 @@ export function CreateAccountForm() {
             <FieldWrapper
               label={
                 <div className='flex items-center gap-2'>
-                  <Label htmlFor='username'>Имя пользователя</Label>
+                  <Label htmlFor='username'>{t('usernameLabel')}</Label>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <HelpCircle className='h-4 w-4 text-muted-foreground cursor-help' />
@@ -87,13 +89,13 @@ export function CreateAccountForm() {
                     >
                       <div className='space-y-1'>
                         <p className='font-medium'>
-                          Правила для имени пользователя:
+                          {t('usernameTooltip.title')}:
                         </p>
                         <ul className='text-xs space-y-1'>
-                          <li>• От 3 до 20 символов</li>
-                          <li>• Только латинские буквы (a-z, A-Z)</li>
-                          <li>• Цифры (0-9)</li>
-                          <li>• Символы: дефис (-) и подчеркивание (_)</li>
+                          <li>• {t('usernameTooltip.rules[0]')}</li>
+                          <li>• {t('usernameTooltip.rules[1]')}</li>
+                          <li>• {t('usernameTooltip.rules[2]')}</li>
+                          <li>• {t('usernameTooltip.rules[3]')}</li>
                         </ul>
                       </div>
                     </TooltipContent>
@@ -116,7 +118,7 @@ export function CreateAccountForm() {
             </FieldWrapper>
 
             <FieldWrapper
-              label='Пароль'
+              label={t('passwordLabel')}
               name='password'
             >
               <FormField
@@ -137,7 +139,7 @@ export function CreateAccountForm() {
               type='submit'
               disabled={!isValid || isLoadingCreate}
             >
-              Зарегистрироваться
+              {t('submitButton')}
             </Button>
           </FormWrapper>
         </form>

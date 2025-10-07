@@ -1,5 +1,25 @@
 {
   "home": {
     "title": "Home page"
+  },
+  "auth": {
+    "register": {
+      "heading": "Registration",
+      "backButtonLabel": "Have an account? Login",
+      "usernameLabel": "Username",
+      "usernameTooltip": {
+        "title": "Rules for username",
+        "rules": [
+          "From 3 to 20 characters",
+          "Only Latin letters (a-z, A-Z)",
+          "Numbers (0-9)",
+          "Symbols: dash (-) and underscore (_)"
+        ]
+      },
+      "passwordLabel": "Password",
+      "submitButton": "Register",
+      "successMessage": "Success registration",
+      "errorMessage": "Failed to register"
+    }
   }
 }
