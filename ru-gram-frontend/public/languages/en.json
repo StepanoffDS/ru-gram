@@ -20,6 +20,18 @@
       "submitButton": "Register",
       "successMessage": "Success registration",
       "errorMessage": "Failed to register"
+    },
+    "login": {
+      "heading": "Login to your account",
+      "backButtonLabel": "No account? Register",
+      "loginLabel": "Login",
+      "loginTooltip": {
+        "title": "Username or email"
+      },
+      "passwordLabel": "Password",
+      "submitButton": "Login",
+      "successMessage": "Success login",
+      "errorMessage": "Failed to login"
     }
   }
 }

@@ -16,9 +16,22 @@
           "Символы: дефис (-) и подчеркивание (_)"
         ]
       },
+      "passwordLabel": "Пароль",
       "submitButton": "Зарегистрироваться",
       "successMessage": "Успешная регистрация",
       "errorMessage": "Не удалось зарегистрироваться"
+    },
+    "login": {
+      "heading": "Вход",
+      "backButtonLabel": "Нет аккаунта? Зарегистрироваться",
+      "loginLabel": "Логин",
+      "loginTooltip": {
+        "title": "Имя пользователя или email"
+      },
+      "passwordLabel": "Пароль",
+      "submitButton": "Войти",
+      "successMessage": "Успешный вход",
+      "errorMessage": "Не удалось войти"
     }
   }
 }

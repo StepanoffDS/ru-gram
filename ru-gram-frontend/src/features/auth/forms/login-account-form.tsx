@@ -1,6 +1,6 @@
 'use client';
 
-import { useCreateUserMutation } from '@/graphql/generated/output';
+import { useLoginUserMutation } from '@/graphql/generated/output';
 import { Button } from '@/shared/components/ui/button';
 import { Form, FormField } from '@/shared/components/ui/form';
 import { Input } from '@/shared/components/ui/input';
@@ -13,76 +13,57 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { HelpCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { AuthWrapper } from '../auth-wrapper';
+
+import { useRouter } from 'next/navigation';
 import {
-  createAccountSchema,
-  type CreateAccountSchema,
-} from '../schemas/create-account.schema';
+  loginAccountSchema,
+  type LoginAccountSchema,
+} from '../schemas/login-account.schema';
 import { FieldWrapper } from '../ui/field-wrapper';
 import { FormWrapper } from '../ui/form-wrapper';
 
-export function CreateAccountForm() {
-  const t = useTranslations('auth.register');
+export function LoginAccountForm() {
+  const t = useTranslations('auth.login');
   const router = useRouter();
-  const usernameRules = t.raw('usernameTooltip.rules') as string[];
-  const form = useForm<CreateAccountSchema>({
-    resolver: zodResolver(createAccountSchema),
+  const form = useForm<LoginAccountSchema>({
+    resolver: zodResolver(loginAccountSchema),
     defaultValues: {
-      username: '',
-      email: '',
+      login: '',
       password: '',
     },
   });
   const { isValid } = form.formState;
 
-  const [createUser, { loading: isLoadingCreate }] = useCreateUserMutation({
+  const [loginUser, { loading: isLoadingLogin }] = useLoginUserMutation({
     onCompleted: () => {
       toast.success(t('successMessage'));
-      router.push('/login');
+      router.push('/');
     },
     onError: () => {
       toast.error(t('errorMessage'));
     },
   });
 
-  const onSubmit = (data: CreateAccountSchema) => {
-    createUser({ variables: { data } });
+  const onSubmit = (data: LoginAccountSchema) => {
+    loginUser({ variables: { data } });
   };
 
   return (
     <AuthWrapper
       heading={t('heading')}
       backButtonLabel={t('backButtonLabel')}
-      backButtonHref='/login'
+      backButtonHref='/register'
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormWrapper>
             <FieldWrapper
-              label='Email'
-              name='email'
-            >
-              <FormField
-                control={form.control}
-                name='email'
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    value={field.value || ''}
-                    placeholder='example@gmail.com'
-                    disabled={isLoadingCreate}
-                  />
-                )}
-              />
-            </FieldWrapper>
-
-            <FieldWrapper
               label={
                 <div className='flex items-center gap-2'>
-                  <Label htmlFor='username'>{t('usernameLabel')}</Label>
+                  <Label htmlFor='login'>{t('loginLabel')}</Label>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <HelpCircle className='h-4 w-4 text-muted-foreground cursor-help' />
@@ -92,14 +73,7 @@ export function CreateAccountForm() {
                       className='max-w-xs'
                     >
                       <div className='space-y-1'>
-                        <p className='font-medium'>
-                          {t('usernameTooltip.title')}:
-                        </p>
-                        <ul className='text-xs space-y-1'>
-                          {usernameRules.map((rule, index) => (
-                            <li key={index}>• {rule}</li>
-                          ))}
-                        </ul>
+                        <p className='text-xs'>{t('loginTooltip.title')}</p>
                       </div>
                     </TooltipContent>
                   </Tooltip>
@@ -108,13 +82,13 @@ export function CreateAccountForm() {
             >
               <FormField
                 control={form.control}
-                name='username'
+                name='login'
                 render={({ field }) => (
                   <Input
                     {...field}
                     value={field.value || ''}
                     placeholder='john_doe'
-                    disabled={isLoadingCreate}
+                    disabled={isLoadingLogin}
                   />
                 )}
               />
@@ -132,7 +106,7 @@ export function CreateAccountForm() {
                     {...field}
                     value={field.value || ''}
                     placeholder='********'
-                    disabled={isLoadingCreate}
+                    disabled={isLoadingLogin}
                   />
                 )}
               />
@@ -140,7 +114,7 @@ export function CreateAccountForm() {
 
             <Button
               type='submit'
-              disabled={!isValid || isLoadingCreate}
+              disabled={!isValid || isLoadingLogin}
             >
               {t('submitButton')}
             </Button>

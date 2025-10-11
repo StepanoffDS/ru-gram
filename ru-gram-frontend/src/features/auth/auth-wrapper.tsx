@@ -42,7 +42,12 @@ export function AuthWrapper({
 
       <div className='w-full lg:w-1/2 flex items-center justify-center p-8'>
         <div className='w-full max-w-md space-y-4'>
-          <h1 className='text-3xl font-bold'>{heading}</h1>
+          <h1
+            className='text-3xl font-bold'
+            data-heading-tag='H1'
+          >
+            {heading}
+          </h1>
           {children}
           {backButtonLabel && backButtonHref && (
             <Link
