@@ -1,10 +1,13 @@
+import type { Metadata } from 'next';
+import { Comfortaa, Geist, Geist_Mono } from 'next/font/google';
+
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
+
 import { ApolloClientProvider } from '@/providers/apollo-client-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { Toaster } from '@/shared/components/ui/sonner';
-import type { Metadata } from 'next';
-import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages } from 'next-intl/server';
-import { Comfortaa, Geist, Geist_Mono } from 'next/font/google';
+
 import './globals.css';
 
 const geistSans = Geist({

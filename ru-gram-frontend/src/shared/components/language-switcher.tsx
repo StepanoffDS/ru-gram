@@ -1,9 +1,11 @@
 'use client';
 
-import { Language, languages } from '@/shared/libs/i18n/config';
-import { setLanguage } from '@/shared/libs/i18n/language';
 import { useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
+
+import { Language, languages } from '@/shared/libs/i18n/config';
+import { setLanguage } from '@/shared/libs/i18n/language';
+
 import { Button } from './ui/button';
 
 export function LanguageSwitcher() {

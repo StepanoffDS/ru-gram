@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
+
 import { COOKIE_NAME, defaultLanguage, Language } from './config';
 
 export async function getCurrentLanguage() {

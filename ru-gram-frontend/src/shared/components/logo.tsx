@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import logo from '../../../public/images/logo.svg';
 
 interface LogoProps {
@@ -7,7 +8,7 @@ interface LogoProps {
 
 export function Logo({ size = 'medium' }: LogoProps) {
   return (
-    <div className='flex gap-1 items-end-safe'>
+    <div className='flex items-end-safe gap-1'>
       <Image
         src={logo}
         alt='logo'
@@ -15,7 +16,7 @@ export function Logo({ size = 'medium' }: LogoProps) {
         height={40}
       />
       {size === 'medium' && (
-        <span className='text-2xl font-bold leading-none font-comfortaa -mb-0.5 -ml-0.5'>
+        <span className='font-comfortaa -mb-0.5 -ml-0.5 text-2xl leading-none font-bold'>
           u-gram
         </span>
       )}

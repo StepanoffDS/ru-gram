@@ -1,7 +1,8 @@
 import Image from 'next/image';
+import Link from 'next/link';
+
 import { PropsWithChildren } from 'react';
 
-import Link from 'next/link';
 import authDark from '../../../../public/images/auth/auth-dark-bg.jpg';
 import authLight from '../../../../public/images/auth/auth-light-bg.jpg';
 
@@ -18,10 +19,10 @@ export function AuthWrapper({
   backButtonHref,
 }: PropsWithChildren<AuthWrapperProps>) {
   return (
-    <div className='min-h-screen flex'>
-      <div className='hidden lg:flex lg:w-1/2 items-center justify-center relative'>
-        <div className='w-full h-full flex items-center justify-center'>
-          <div className='text-gray-500 text-center relative w-full h-full'>
+    <div className='flex min-h-screen'>
+      <div className='relative hidden items-center justify-center lg:flex lg:w-1/2'>
+        <div className='flex h-full w-full items-center justify-center'>
+          <div className='relative h-full w-full text-center text-gray-500'>
             {/* Светлая тема */}
             <Image
               src={authLight}
@@ -40,7 +41,7 @@ export function AuthWrapper({
         </div>
       </div>
 
-      <div className='w-full lg:w-1/2 flex items-center justify-center p-8'>
+      <div className='flex w-full items-center justify-center p-8 lg:w-1/2'>
         <div className='w-full max-w-md space-y-4'>
           <h1
             className='text-3xl font-bold'

@@ -1,15 +1,14 @@
 'use client';
 
+import { useAuth } from '@/features/auth/hooks/useAuth';
+import { AuthWarning } from '@/shared/components/auth-warning';
 import {
   AlertDialog,
-  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
 } from '@/shared/components/ui/alert-dialog';
-import { Button } from '@/shared/components/ui/button';
+
+import { CreatePostFooter } from './footer';
+import { CreatePostHeader } from './header';
 
 interface CreatePostProps {
   isOpen: boolean;
@@ -17,31 +16,29 @@ interface CreatePostProps {
 }
 
 export function CreatePost({ isOpen, setIsOpen }: CreatePostProps) {
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return (
+      <AuthWarning
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
+    );
+  }
 
   return (
     <AlertDialog open={isOpen}>
       <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Создать пост</AlertDialogTitle>
-          <AlertDialogDescription>
-            Создайте новый пост для вашей аудитории
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+        <CreatePostHeader />
 
         <div className='space-y-4'>
-          {/* Здесь будет форма создания поста */}
-          <p className='text-sm text-muted-foreground'>
+          <p className='text-muted-foreground text-sm'>
             Форма создания поста будет добавлена здесь
           </p>
         </div>
 
-        <AlertDialogFooter>
-          <AlertDialogCancel onClick={handleClose}>Отмена</AlertDialogCancel>
-          <Button>Создать</Button>
-        </AlertDialogFooter>
+        <CreatePostFooter setIsOpen={setIsOpen} />
       </AlertDialogContent>
     </AlertDialog>
   );

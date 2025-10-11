@@ -1,5 +1,10 @@
 'use client';
 
+import Link from 'next/link';
+
+import { PlusIcon } from 'lucide-react';
+import { useState } from 'react';
+
 import { CreatePost } from '@/features/create-post';
 import { Logo } from '@/shared/components/logo';
 import {
@@ -12,8 +17,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/shared/components/ui/sidebar';
-import { PlusIcon } from 'lucide-react';
-import { useState } from 'react';
 
 export function MainSidebar() {
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
@@ -21,7 +24,9 @@ export function MainSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className='mt-4'>
-        <Logo />
+        <Link href='/'>
+          <Logo />
+        </Link>
       </SidebarHeader>
       <SidebarContent className='mt-8 px-2'>
         <SidebarGroupContent>

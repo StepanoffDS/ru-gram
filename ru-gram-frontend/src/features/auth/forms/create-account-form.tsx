@@ -1,5 +1,13 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { HelpCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+
 import { useCreateUserMutation } from '@/graphql/generated/output';
 import { Button } from '@/shared/components/ui/button';
 import { Form, FormField } from '@/shared/components/ui/form';
@@ -10,12 +18,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { HelpCircle } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+
 import {
   createAccountSchema,
   type CreateAccountSchema,
@@ -85,7 +88,7 @@ export function CreateAccountForm() {
                   <Label htmlFor='username'>{t('usernameLabel')}</Label>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <HelpCircle className='h-4 w-4 text-muted-foreground cursor-help' />
+                      <HelpCircle className='text-muted-foreground h-4 w-4 cursor-help' />
                     </TooltipTrigger>
                     <TooltipContent
                       side='top'
@@ -95,7 +98,7 @@ export function CreateAccountForm() {
                         <p className='font-medium'>
                           {t('usernameTooltip.title')}:
                         </p>
-                        <ul className='text-xs space-y-1'>
+                        <ul className='space-y-1 text-xs'>
                           {usernameRules.map((rule, index) => (
                             <li key={index}>• {rule}</li>
                           ))}

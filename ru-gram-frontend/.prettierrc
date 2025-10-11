@@ -10,8 +10,19 @@
   "endOfLine": "lf",
   "singleAttributePerLine": true,
   "plugins": [
-    "prettier-plugin-tailwindcss",
+    "@ianvs/prettier-plugin-sort-imports",
     "prettier-plugin-organize-attributes",
-    "prettier-plugin-organize-imports"
-  ]
+    "prettier-plugin-tailwindcss"
+  ],
+  "importOrder": [
+    "^next(/.*)?$",
+    "",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@/(.*)$",
+    "",
+    "^[./]"
+  ],
+  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
+  "importOrderTypeScriptVersion": "5.0.0"
 }

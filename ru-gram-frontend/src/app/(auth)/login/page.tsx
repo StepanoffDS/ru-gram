@@ -1,6 +1,8 @@
-import { LoginAccountForm } from '@/features/auth';
 import { Metadata } from 'next';
+
 import { getTranslations } from 'next-intl/server';
+
+import { LoginWrapper } from '@/features/auth/ui/login-wrapper';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('auth.login');
@@ -10,5 +12,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function LoginAccountPage() {
-  return <LoginAccountForm />;
+  return <LoginWrapper />;
 }

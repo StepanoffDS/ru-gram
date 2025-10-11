@@ -1,4 +1,4 @@
-import { type NextRequest, NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export default function middleware(req: NextRequest) {
   const session = req.cookies.get('session')?.value;
