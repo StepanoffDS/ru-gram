@@ -16,11 +16,11 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { AuthWrapper } from '../auth-wrapper';
 import {
   createAccountSchema,
   type CreateAccountSchema,
 } from '../schemas/create-account.schema';
+import { AuthWrapper } from '../ui/auth-wrapper';
 import { FieldWrapper } from '../ui/field-wrapper';
 import { FormWrapper } from '../ui/form-wrapper';
 

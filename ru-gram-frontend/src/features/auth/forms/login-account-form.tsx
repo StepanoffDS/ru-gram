@@ -15,7 +15,7 @@ import { HelpCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { AuthWrapper } from '../auth-wrapper';
+import { AuthWrapper } from '../ui/auth-wrapper';
 
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../hooks/useAuth';

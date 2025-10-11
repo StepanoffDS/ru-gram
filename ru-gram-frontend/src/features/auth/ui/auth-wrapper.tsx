@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { PropsWithChildren } from 'react';
 
 import Link from 'next/link';
-import authDark from '../../../public/images/auth/auth-dark-bg.jpg';
-import authLight from '../../../public/images/auth/auth-light-bg.jpg';
+import authDark from '../../../../public/images/auth/auth-dark-bg.jpg';
+import authLight from '../../../../public/images/auth/auth-light-bg.jpg';
 
 interface AuthWrapperProps {
   heading: string;
