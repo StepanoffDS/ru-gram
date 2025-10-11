@@ -18,16 +18,19 @@ import { toast } from 'sonner';
 import { AuthWrapper } from '../auth-wrapper';
 
 import { useRouter } from 'next/navigation';
+import { useAuth } from '../hooks/useAuth';
 import {
   loginAccountSchema,
   type LoginAccountSchema,
 } from '../schemas/login-account.schema';
+import { Role } from '../types';
 import { FieldWrapper } from '../ui/field-wrapper';
 import { FormWrapper } from '../ui/form-wrapper';
 
 export function LoginAccountForm() {
   const t = useTranslations('auth.login');
   const router = useRouter();
+  const { auth, setRole } = useAuth();
   const form = useForm<LoginAccountSchema>({
     resolver: zodResolver(loginAccountSchema),
     defaultValues: {
@@ -39,8 +42,9 @@ export function LoginAccountForm() {
 
   const [loginUser, { loading: isLoadingLogin }] = useLoginUserMutation({
     onCompleted: (data) => {
+      auth();
+      setRole(data.loginUser.role as Role);
       toast.success(t('successMessage'));
-      localStorage.setItem('role', data.loginUser.role);
       router.push('/');
     },
     onError: () => {
