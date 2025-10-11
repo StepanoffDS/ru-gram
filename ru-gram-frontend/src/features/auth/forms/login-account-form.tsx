@@ -38,8 +38,9 @@ export function LoginAccountForm() {
   const { isValid } = form.formState;
 
   const [loginUser, { loading: isLoadingLogin }] = useLoginUserMutation({
-    onCompleted: () => {
+    onCompleted: (data) => {
       toast.success(t('successMessage'));
+      localStorage.setItem('role', data.loginUser.role);
       router.push('/');
     },
     onError: () => {
