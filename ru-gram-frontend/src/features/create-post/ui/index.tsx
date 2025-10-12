@@ -53,6 +53,7 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
   return { files, displayUrls };
 }
 
+// TODO: сделать функционал хранения данных создаваемого поста в сторе
 export function CreatePost({ isOpen, setIsOpen }: CreatePostProps) {
   const { isAuthenticated } = useAuth();
   const [createPost, { loading: createLoading }] = useCreatePostMutation();
@@ -74,7 +75,6 @@ export function CreatePost({ isOpen, setIsOpen }: CreatePostProps) {
     try {
       setUploadLoading(true);
 
-      // Создаем пост
       const { data: postData } = await createPost({
         variables: {
           data: {
@@ -90,7 +90,6 @@ export function CreatePost({ isOpen, setIsOpen }: CreatePostProps) {
 
       const postId = postData.createPost.id;
 
-      // Если есть изображения, загружаем их по одному через REST API
       if (imageFiles.length > 0) {
         for (let i = 0; i < imageFiles.length; i++) {
           setUploadProgress(
@@ -194,14 +193,12 @@ export function CreatePost({ isOpen, setIsOpen }: CreatePostProps) {
                               setPreview([...preview, ...displayUrls]);
                               setImageFiles(newImageFiles);
 
-                              // Обновляем форму для валидации
                               const dataTransfer = new DataTransfer();
                               newImageFiles.forEach((file) =>
                                 dataTransfer.items.add(file),
                               );
                               onChange(dataTransfer.files);
 
-                              // Очищаем input для возможности повторного выбора того же файла
                               event.target.value = '';
                             }}
                           />
