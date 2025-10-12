@@ -19,12 +19,6 @@ export type Scalars = {
   Upload: { input: any; output: any; }
 };
 
-export type AddImageResponseModel = {
-  __typename?: 'AddImageResponseModel';
-  allImages: Array<Scalars['String']['output']>;
-  imageUrl: Scalars['String']['output'];
-};
-
 export type ChangeEmailInput = {
   newEmail: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -98,7 +92,6 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addImageToPost: AddImageResponseModel;
   changeEmail: Scalars['Boolean']['output'];
   changePassword: Scalars['Boolean']['output'];
   changeProfileInfo: Scalars['Boolean']['output'];
@@ -108,19 +101,11 @@ export type Mutation = {
   deletePost: Scalars['Boolean']['output'];
   loginUser: UserModel;
   logoutUser: Scalars['String']['output'];
-  removeImageFromPost: RemoveImageResponseModel;
   removeProfileAvatar: Scalars['Boolean']['output'];
   toggleHidePost: PostModel;
   toggleLikePost: LikeResponseModel;
   updatePost: PostModel;
-  updatePostImages: UpdateImagesResponseModel;
   updateProfileAvatar: Scalars['Boolean']['output'];
-};
-
-
-export type MutationAddImageToPostArgs = {
-  file: Scalars['Upload']['input'];
-  postId: Scalars['String']['input'];
 };
 
 
@@ -164,12 +149,6 @@ export type MutationLoginUserArgs = {
 };
 
 
-export type MutationRemoveImageFromPostArgs = {
-  imageUrl: Scalars['String']['input'];
-  postId: Scalars['String']['input'];
-};
-
-
 export type MutationToggleHidePostArgs = {
   postId: Scalars['String']['input'];
 };
@@ -183,12 +162,6 @@ export type MutationToggleLikePostArgs = {
 export type MutationUpdatePostArgs = {
   data: UpdatePostInput;
   id: Scalars['String']['input'];
-};
-
-
-export type MutationUpdatePostImagesArgs = {
-  files: Array<Scalars['Upload']['input']>;
-  postId: Scalars['String']['input'];
 };
 
 
@@ -269,18 +242,6 @@ export type QueryGetLikedUsersByPostArgs = {
   postId: Scalars['String']['input'];
 };
 
-export type RemoveImageResponseModel = {
-  __typename?: 'RemoveImageResponseModel';
-  remainingImages: Array<Scalars['String']['output']>;
-  success: Scalars['Boolean']['output'];
-};
-
-export type UpdateImagesResponseModel = {
-  __typename?: 'UpdateImagesResponseModel';
-  images: Array<Scalars['String']['output']>;
-  success: Scalars['Boolean']['output'];
-};
-
 export type UpdatePostInput = {
   hidden: Scalars['Boolean']['input'];
   images: Array<Scalars['String']['input']>;
@@ -323,14 +284,6 @@ export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser: string };
 
-export type AddImageToPostMutationVariables = Exact<{
-  postId: Scalars['String']['input'];
-  file: Scalars['Upload']['input'];
-}>;
-
-
-export type AddImageToPostMutation = { __typename?: 'Mutation', addImageToPost: { __typename?: 'AddImageResponseModel', imageUrl: string, allImages: Array<string> } };
-
 export type CreatePostMutationVariables = Exact<{
   data: CreatePostInput;
 }>;
@@ -338,28 +291,12 @@ export type CreatePostMutationVariables = Exact<{
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'PostModel', id: string, title?: string | null, text?: string | null, images?: Array<string> | null } };
 
-export type RemoveImageFromPostMutationVariables = Exact<{
-  postId: Scalars['String']['input'];
-  imageUrl: Scalars['String']['input'];
-}>;
-
-
-export type RemoveImageFromPostMutation = { __typename?: 'Mutation', removeImageFromPost: { __typename?: 'RemoveImageResponseModel', success: boolean, remainingImages: Array<string> } };
-
-export type UpdatePostImagesMutationVariables = Exact<{
-  postId: Scalars['String']['input'];
-  files: Array<Scalars['Upload']['input']> | Scalars['Upload']['input'];
-}>;
-
-
-export type UpdatePostImagesMutation = { __typename?: 'Mutation', updatePostImages: { __typename?: 'UpdateImagesResponseModel', success: boolean, images: Array<string> } };
-
 export type FindAllPostsQueryVariables = Exact<{
   filter: FilterPostsInput;
 }>;
 
 
-export type FindAllPostsQuery = { __typename?: 'Query', findAllPosts: Array<{ __typename?: 'PostModel', id: string, title?: string | null, text?: string | null, images?: Array<string> | null, createdAt: any, updatedAt: any, user: { __typename?: 'UserModel', id: string, username: string } }> };
+export type FindAllPostsQuery = { __typename?: 'Query', findAllPosts: Array<{ __typename?: 'PostModel', id: string, title?: string | null, text?: string | null, images?: Array<string> | null, createdAt: any, updatedAt: any, isLiked?: boolean | null, likes: number, user: { __typename?: 'UserModel', id: string, username: string } }> };
 
 
 export const CreateUserDocument = gql`
@@ -462,41 +399,6 @@ export function useLogoutUserMutation(baseOptions?: Apollo.MutationHookOptions<L
 export type LogoutUserMutationHookResult = ReturnType<typeof useLogoutUserMutation>;
 export type LogoutUserMutationResult = Apollo.MutationResult<LogoutUserMutation>;
 export type LogoutUserMutationOptions = Apollo.BaseMutationOptions<LogoutUserMutation, LogoutUserMutationVariables>;
-export const AddImageToPostDocument = gql`
-    mutation AddImageToPost($postId: String!, $file: Upload!) {
-  addImageToPost(postId: $postId, file: $file) {
-    imageUrl
-    allImages
-  }
-}
-    `;
-export type AddImageToPostMutationFn = Apollo.MutationFunction<AddImageToPostMutation, AddImageToPostMutationVariables>;
-
-/**
- * __useAddImageToPostMutation__
- *
- * To run a mutation, you first call `useAddImageToPostMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddImageToPostMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addImageToPostMutation, { data, loading, error }] = useAddImageToPostMutation({
- *   variables: {
- *      postId: // value for 'postId'
- *      file: // value for 'file'
- *   },
- * });
- */
-export function useAddImageToPostMutation(baseOptions?: Apollo.MutationHookOptions<AddImageToPostMutation, AddImageToPostMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddImageToPostMutation, AddImageToPostMutationVariables>(AddImageToPostDocument, options);
-      }
-export type AddImageToPostMutationHookResult = ReturnType<typeof useAddImageToPostMutation>;
-export type AddImageToPostMutationResult = Apollo.MutationResult<AddImageToPostMutation>;
-export type AddImageToPostMutationOptions = Apollo.BaseMutationOptions<AddImageToPostMutation, AddImageToPostMutationVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($data: CreatePostInput!) {
   createPost(data: $data) {
@@ -533,76 +435,6 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
-export const RemoveImageFromPostDocument = gql`
-    mutation RemoveImageFromPost($postId: String!, $imageUrl: String!) {
-  removeImageFromPost(postId: $postId, imageUrl: $imageUrl) {
-    success
-    remainingImages
-  }
-}
-    `;
-export type RemoveImageFromPostMutationFn = Apollo.MutationFunction<RemoveImageFromPostMutation, RemoveImageFromPostMutationVariables>;
-
-/**
- * __useRemoveImageFromPostMutation__
- *
- * To run a mutation, you first call `useRemoveImageFromPostMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveImageFromPostMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeImageFromPostMutation, { data, loading, error }] = useRemoveImageFromPostMutation({
- *   variables: {
- *      postId: // value for 'postId'
- *      imageUrl: // value for 'imageUrl'
- *   },
- * });
- */
-export function useRemoveImageFromPostMutation(baseOptions?: Apollo.MutationHookOptions<RemoveImageFromPostMutation, RemoveImageFromPostMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RemoveImageFromPostMutation, RemoveImageFromPostMutationVariables>(RemoveImageFromPostDocument, options);
-      }
-export type RemoveImageFromPostMutationHookResult = ReturnType<typeof useRemoveImageFromPostMutation>;
-export type RemoveImageFromPostMutationResult = Apollo.MutationResult<RemoveImageFromPostMutation>;
-export type RemoveImageFromPostMutationOptions = Apollo.BaseMutationOptions<RemoveImageFromPostMutation, RemoveImageFromPostMutationVariables>;
-export const UpdatePostImagesDocument = gql`
-    mutation UpdatePostImages($postId: String!, $files: [Upload!]!) {
-  updatePostImages(postId: $postId, files: $files) {
-    success
-    images
-  }
-}
-    `;
-export type UpdatePostImagesMutationFn = Apollo.MutationFunction<UpdatePostImagesMutation, UpdatePostImagesMutationVariables>;
-
-/**
- * __useUpdatePostImagesMutation__
- *
- * To run a mutation, you first call `useUpdatePostImagesMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdatePostImagesMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updatePostImagesMutation, { data, loading, error }] = useUpdatePostImagesMutation({
- *   variables: {
- *      postId: // value for 'postId'
- *      files: // value for 'files'
- *   },
- * });
- */
-export function useUpdatePostImagesMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePostImagesMutation, UpdatePostImagesMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdatePostImagesMutation, UpdatePostImagesMutationVariables>(UpdatePostImagesDocument, options);
-      }
-export type UpdatePostImagesMutationHookResult = ReturnType<typeof useUpdatePostImagesMutation>;
-export type UpdatePostImagesMutationResult = Apollo.MutationResult<UpdatePostImagesMutation>;
-export type UpdatePostImagesMutationOptions = Apollo.BaseMutationOptions<UpdatePostImagesMutation, UpdatePostImagesMutationVariables>;
 export const FindAllPostsDocument = gql`
     query FindAllPosts($filter: FilterPostsInput!) {
   findAllPosts(filter: $filter) {
@@ -616,6 +448,8 @@ export const FindAllPostsDocument = gql`
       id
       username
     }
+    isLiked
+    likes
   }
 }
     `;

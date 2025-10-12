@@ -145,8 +145,12 @@ export class PostsService {
   public async create(userId: string, createPostInput: CreatePostInput) {
     const { title, text, images } = createPostInput;
 
-    if (!title && !text && (!images || images.length === 0)) {
+    if (!title && !text && images && images.length === 0) {
       throw new BadRequestException('Пост не может быть пустым');
+    }
+
+    if (text && text.length > 1500) {
+      throw new BadRequestException('Текст не может превышать 1500 символов');
     }
 
     const post = await this.prismaService.post.create({

@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_SERVER_URL?.replace('/graphql', '');
+import { API_URL } from '../constants/api.constants';
 
 interface AddImageResponse {
   imageUrl: string;

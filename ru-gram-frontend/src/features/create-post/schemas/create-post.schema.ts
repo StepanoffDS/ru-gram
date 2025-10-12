@@ -31,13 +31,9 @@ export const createPostSchema = z
         return files.length <= 10;
       }, 'Максимум 10 изображений'),
   })
-  .refine(
-    (data) =>
-      data.title || data.text || (data.images && data.images.length > 0),
-    {
-      message: 'Пост не может быть пустым',
-      path: ['title'],
-    },
-  );
+  .refine((data) => data.title || data.text, {
+    message: 'Пост не может быть пустым',
+    path: ['title'],
+  });
 
 export type CreatePostSchema = z.infer<typeof createPostSchema>;

@@ -1,7 +1,9 @@
-export default function MainPage() {
+import { PostsList } from '@/features/posts-list';
+
+export default async function MainPage() {
   return (
-    <div>
-      <div>MainPage</div>
+    <div className='mr-[3vw] ml-[15vw]'>
+      <PostsList />
     </div>
   );
 }

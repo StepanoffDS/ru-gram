@@ -47,7 +47,7 @@ model Post {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   title  String?
-  text   String?  @db.VarChar(1000)
+  text   String?  @db.VarChar(1500)
   images String[]
   hidden Boolean  @default(false)
 

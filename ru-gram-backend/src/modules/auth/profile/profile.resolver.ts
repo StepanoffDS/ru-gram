@@ -22,6 +22,7 @@ export class ProfileResolver {
     return await this.profileService.updateAvatar(user, avatar);
   }
 
+  // TODO: работу аватара graphql -> rest api
   @Mutation(() => Boolean, { name: 'removeProfileAvatar' })
   public async removeAvatar(@Authorized() user: User) {
     return await this.profileService.removeAvatar(user);
