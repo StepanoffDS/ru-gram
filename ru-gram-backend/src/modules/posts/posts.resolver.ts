@@ -97,34 +97,4 @@ export class PostsResolver {
   ) {
     return this.postsService.toggleHide(postId, userId);
   }
-
-  @Auth()
-  @Mutation(() => AddImageResponseModel, { name: 'addImageToPost' })
-  public async addImageToPost(
-    @Args('postId') postId: string,
-    @Authorized('id') userId: string,
-    @Args('file', { type: () => GraphQLUpload }) file: Upload,
-  ) {
-    return this.postsService.addImageToPost(postId, userId, file);
-  }
-
-  @Auth()
-  @Mutation(() => RemoveImageResponseModel, { name: 'removeImageFromPost' })
-  public async removeImageFromPost(
-    @Args('postId') postId: string,
-    @Args('imageUrl') imageUrl: string,
-    @Authorized('id') userId: string,
-  ) {
-    return this.postsService.removeImageFromPost(postId, userId, imageUrl);
-  }
-
-  @Auth()
-  @Mutation(() => UpdateImagesResponseModel, { name: 'updatePostImages' })
-  public async updatePostImages(
-    @Args('postId') postId: string,
-    @Authorized('id') userId: string,
-    @Args('files', { type: () => [GraphQLUpload] }) files: Upload[],
-  ) {
-    return this.postsService.updatePostImages(postId, userId, files);
-  }
 }

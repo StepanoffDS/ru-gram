@@ -378,59 +378,6 @@ export class PostsService {
     };
   }
 
-  public async addImageToPost(postId: string, userId: string, file: Upload) {
-    const post = await this.prismaService.post.findUnique({
-      where: { id: postId },
-    });
-
-    if (!post) {
-      throw new NotFoundException('Пост не найден');
-    }
-
-    if (post.userId !== userId) {
-      throw new ForbiddenException(
-        'Вы можете добавлять изображения только к своим постам',
-      );
-    }
-
-    PostImageUtil.validateImage(file.mimetype, file.size, post.images.length);
-
-    const chunks: Buffer[] = [];
-    for await (const chunk of file.createReadStream()) {
-      chunks.push(chunk);
-    }
-    const buffer = Buffer.concat(chunks);
-
-    const isGif = PostImageUtil.isGif(file.mimetype);
-    const processedBuffer = await PostImageUtil.processImage(buffer, isGif);
-
-    const filename = PostImageUtil.generateFilename(
-      postId,
-      file.filename,
-      post.images.length,
-    );
-
-    await this.storageService.uploadFile(
-      processedBuffer,
-      filename,
-      'image/webp',
-    );
-
-    const updatedPost = await this.prismaService.post.update({
-      where: { id: postId },
-      data: {
-        images: {
-          push: filename,
-        },
-      },
-    });
-
-    return {
-      imageUrl: filename,
-      allImages: updatedPost.images,
-    };
-  }
-
   public async removeImageFromPost(
     postId: string,
     userId: string,
@@ -470,10 +417,62 @@ export class PostsService {
     };
   }
 
+  public async addImageToPost(
+    postId: string,
+    userId: string,
+    file: Express.Multer.File,
+  ) {
+    const post = await this.prismaService.post.findUnique({
+      where: { id: postId },
+    });
+
+    if (!post) {
+      throw new NotFoundException('Пост не найден');
+    }
+
+    if (post.userId !== userId) {
+      throw new ForbiddenException(
+        'Вы можете добавлять изображения только к своим постам',
+      );
+    }
+
+    PostImageUtil.validateImage(file.mimetype, file.size, post.images.length);
+
+    const buffer = file.buffer;
+    const isGif = PostImageUtil.isGif(file.mimetype);
+    const processedBuffer = await PostImageUtil.processImage(buffer, isGif);
+
+    const filename = PostImageUtil.generateFilename(
+      postId,
+      file.originalname,
+      post.images.length,
+    );
+
+    await this.storageService.uploadFile(
+      processedBuffer,
+      filename,
+      'image/webp',
+    );
+
+    const updatedPost = await this.prismaService.post.update({
+      where: { id: postId },
+      data: {
+        images: {
+          push: filename,
+        },
+      },
+    });
+
+    return {
+      imageUrl: filename,
+      allImages: updatedPost.images,
+    };
+  }
+
   public async updatePostImages(
     postId: string,
     userId: string,
-    files: Upload[],
+    files: Express.Multer.File[],
   ) {
     const post = await this.prismaService.post.findUnique({
       where: { id: postId },
@@ -506,16 +505,15 @@ export class PostsService {
 
       PostImageUtil.validateImage(file.mimetype, file.size, i);
 
-      const chunks: Buffer[] = [];
-      for await (const chunk of file.createReadStream()) {
-        chunks.push(chunk);
-      }
-      const buffer = Buffer.concat(chunks);
-
+      const buffer = file.buffer;
       const isGif = PostImageUtil.isGif(file.mimetype);
       const processedBuffer = await PostImageUtil.processImage(buffer, isGif);
 
-      const filename = PostImageUtil.generateFilename(postId, file.filename, i);
+      const filename = PostImageUtil.generateFilename(
+        postId,
+        file.originalname,
+        i,
+      );
 
       await this.storageService.uploadFile(
         processedBuffer,

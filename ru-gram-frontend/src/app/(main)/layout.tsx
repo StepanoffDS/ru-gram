@@ -1,7 +1,4 @@
-import { Suspense } from 'react';
-
 import { MainSidebar } from '@/entities/sidebar';
-import { CreatePost } from '@/features/create-post';
 import {
   SidebarProvider,
   SidebarTrigger,
@@ -19,9 +16,6 @@ export default async function RootLayout({
         <SidebarTrigger />
         {children}
       </main>
-      <Suspense fallback={null}>
-        <CreatePost />
-      </Suspense>
     </SidebarProvider>
   );
 }
