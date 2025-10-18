@@ -49,7 +49,6 @@ export function PostDropdown({ post }: { post: ListPost }) {
             </DropdownMenuItem>
           )}
           <DropdownMenuItem
-            onClick={() => console.log('Delete post')}
             variant='destructive'
             className='flex items-center gap-2'
           >

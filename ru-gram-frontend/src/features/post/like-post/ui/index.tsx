@@ -3,11 +3,7 @@
 import { Heart } from 'lucide-react';
 import { useState } from 'react';
 
-import {
-  FindAllPostsDocument,
-  FindAllPostsQuery,
-  useToggleLikePostMutation,
-} from '@/graphql/generated/output';
+import { useToggleLikePostMutation } from '@/graphql/generated/output';
 import { Button } from '@/shared/components/ui/button';
 import { Nullable } from '@/shared/libs/types';
 import { cn } from '@/shared/libs/utils';
@@ -23,11 +19,8 @@ export function LikePost({ postId, isLiked, likes }: LikePostProps) {
   const [likesPost, setLikesPost] = useState(likes ?? 0);
   const [toggleLike] = useToggleLikePostMutation();
 
-  console.log('{ postId, isLiked, likes }', { postId, isLiked, likes });
-
   const handleToggleLike = async () => {
     const result = await toggleLike({ variables: { postId } });
-    console.log('result', result);
     if (result.data?.toggleLikePost) {
       setIsLikedPost(result.data.toggleLikePost.isLiked);
       setLikesPost(result.data.toggleLikePost.likesCount);
