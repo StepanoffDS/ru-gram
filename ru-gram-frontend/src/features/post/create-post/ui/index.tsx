@@ -78,6 +78,8 @@ export function CreatePost() {
             text: data.text,
           },
         },
+        refetchQueries: ['FindAllPosts'],
+        awaitRefetchQueries: true,
       });
 
       if (!postData?.createPost) {

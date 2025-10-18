@@ -12,7 +12,7 @@ export default async function RootLayout({
   return (
     <SidebarProvider>
       <MainSidebar />
-      <main>
+      <main className='relative flex-1'>
         <SidebarTrigger />
         {children}
       </main>

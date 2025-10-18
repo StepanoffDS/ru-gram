@@ -1,33 +1,22 @@
 'use client';
 
-import Image from 'next/image';
-
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PlusIcon, XIcon } from 'lucide-react';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { FieldWrapper } from '@/features/auth/ui/field-wrapper';
-import { PostModel, useUpdatePostMutation } from '@/graphql/generated/output';
+import { useUpdatePostMutation } from '@/graphql/generated/output';
 import { AuthWarning } from '@/shared/components/auth-warning';
 import {
   AlertDialog,
   AlertDialogContent,
 } from '@/shared/components/ui/alert-dialog';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/shared/components/ui/form';
+import { Form } from '@/shared/components/ui/form';
 import { Input } from '@/shared/components/ui/input';
 import { Textarea } from '@/shared/components/ui/textarea';
-import { addImageToPost } from '@/shared/libs/post-images-api';
+import { ListPost } from '@/shared/libs/types';
 
 import {
   updatePostSchema,
@@ -36,22 +25,10 @@ import {
 import { UpdatePostFooter } from './footer';
 import { UpdatePostHeader } from './header';
 
-function getImageData(event: ChangeEvent<HTMLInputElement>) {
-  const fileList = event.target.files;
-  if (!fileList || fileList.length === 0) {
-    return { files: [], displayUrls: [] };
-  }
-
-  const files = Array.from(fileList);
-  const displayUrls = files.map((file) => URL.createObjectURL(file));
-
-  return { files, displayUrls };
-}
-
 interface EditPostProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  post: PostModel;
+  post: ListPost;
 }
 
 export function EditPost({ isOpen, setIsOpen, post }: EditPostProps) {
@@ -82,6 +59,8 @@ export function EditPost({ isOpen, setIsOpen, post }: EditPostProps) {
             text: data.text || '',
           },
         },
+        refetchQueries: ['FindAllPosts'],
+        awaitRefetchQueries: true,
       });
 
       if (!postData?.updatePost) {

@@ -14,12 +14,13 @@ import { PostsService } from './posts.service';
 export class PostsResolver {
   constructor(private readonly postsService: PostsService) {}
 
+  @Auth()
   @Query(() => [PostModel], { name: 'findAllPosts' })
   public async findAll(
     @Args('filter') filterPostsInput: FilterPostsInput,
-    @Authorized() user?: any,
+    @Authorized() user: any,
   ) {
-    const userId = user?.id;
+    const userId = user.id;
     return this.postsService.findAll(filterPostsInput, userId);
   }
 
@@ -28,12 +29,19 @@ export class PostsResolver {
     return this.postsService.findOneById(id);
   }
 
+  @Auth()
   @Query(() => [PostModel], { name: 'findAllByUsername' })
   public async findAllByUsername(
     @Args('username') username: string,
     @Args('filter') filterPostsInput: FilterPostsInput,
+    @Authorized() user: any,
   ) {
-    return this.postsService.findAllByUsername(username, filterPostsInput);
+    const userId = user.id;
+    return this.postsService.findAllByUsername(
+      username,
+      filterPostsInput,
+      userId,
+    );
   }
 
   @Query(() => PaginatedLikedUsersModel, { name: 'getLikedUsersByPost' })

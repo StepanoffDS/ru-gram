@@ -1,0 +1,6 @@
+mutation ToggleLikePost($postId: String!) {
+  toggleLikePost(postId: $postId) {
+    isLiked
+    likesCount
+  }
+}

@@ -130,6 +130,7 @@ export class PostsService {
   public async findAllByUsername(
     username: string,
     filterPostsInput: FilterPostsInput = {},
+    userId?: string,
   ) {
     const { take, skip, searchTerm } = filterPostsInput;
 
@@ -153,6 +154,15 @@ export class PostsService {
         id: 'asc',
       },
     });
+
+    if (userId) {
+      return Promise.all(
+        posts.map(async (post) => ({
+          ...post,
+          isLiked: await this.isPostLikedByUser(post.id, userId),
+        })),
+      );
+    }
 
     return posts;
   }

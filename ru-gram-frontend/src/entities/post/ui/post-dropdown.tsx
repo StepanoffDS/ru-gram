@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { EditPost } from '@/features/post/edit-post';
-import { PostModel } from '@/graphql/generated/output';
 import { Button } from '@/shared/components/ui/button';
 import {
   DropdownMenu,
@@ -13,9 +12,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
+import { ListPost } from '@/shared/libs/types';
 import { isPostOwnedByUser } from '@/shared/utils/is-post-owned-by-user';
 
-export function PostDropdown({ post }: { post: PostModel }) {
+export function PostDropdown({ post }: { post: ListPost }) {
   const [isEditPostOpen, setIsEditPostOpen] = useState(false);
   const { userId, isAdmin } = useAuth();
   const isOwnedByUser = isPostOwnedByUser({

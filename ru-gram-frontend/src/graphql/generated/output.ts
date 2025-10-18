@@ -290,6 +290,13 @@ export type CreatePostMutationVariables = Exact<{
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'PostModel', id: string, title?: string | null, text?: string | null, images?: Array<string> | null } };
 
+export type ToggleLikePostMutationVariables = Exact<{
+  postId: Scalars['String']['input'];
+}>;
+
+
+export type ToggleLikePostMutation = { __typename?: 'Mutation', toggleLikePost: { __typename?: 'LikeResponseModel', isLiked: boolean, likesCount: number } };
+
 export type UpdatePostMutationVariables = Exact<{
   id: Scalars['String']['input'];
   data: UpdatePostInput;
@@ -303,7 +310,7 @@ export type FindAllPostsQueryVariables = Exact<{
 }>;
 
 
-export type FindAllPostsQuery = { __typename?: 'Query', findAllPosts: Array<{ __typename?: 'PostModel', id: string, title?: string | null, text?: string | null, images?: Array<string> | null, createdAt: any, updatedAt: any, isLiked?: boolean | null, likes: number, user: { __typename?: 'UserModel', id: string, username: string } }> };
+export type FindAllPostsQuery = { __typename?: 'Query', findAllPosts: Array<{ __typename?: 'PostModel', id: string, title?: string | null, text?: string | null, images?: Array<string> | null, createdAt: any, updatedAt: any, isLiked?: boolean | null, likes: number, user: { __typename?: 'UserModel', id: string, username: string, name?: string | null, avatar?: string | null } }> };
 
 
 export const CreateUserDocument = gql`
@@ -442,6 +449,40 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const ToggleLikePostDocument = gql`
+    mutation ToggleLikePost($postId: String!) {
+  toggleLikePost(postId: $postId) {
+    isLiked
+    likesCount
+  }
+}
+    `;
+export type ToggleLikePostMutationFn = Apollo.MutationFunction<ToggleLikePostMutation, ToggleLikePostMutationVariables>;
+
+/**
+ * __useToggleLikePostMutation__
+ *
+ * To run a mutation, you first call `useToggleLikePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleLikePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleLikePostMutation, { data, loading, error }] = useToggleLikePostMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useToggleLikePostMutation(baseOptions?: Apollo.MutationHookOptions<ToggleLikePostMutation, ToggleLikePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleLikePostMutation, ToggleLikePostMutationVariables>(ToggleLikePostDocument, options);
+      }
+export type ToggleLikePostMutationHookResult = ReturnType<typeof useToggleLikePostMutation>;
+export type ToggleLikePostMutationResult = Apollo.MutationResult<ToggleLikePostMutation>;
+export type ToggleLikePostMutationOptions = Apollo.BaseMutationOptions<ToggleLikePostMutation, ToggleLikePostMutationVariables>;
 export const UpdatePostDocument = gql`
     mutation UpdatePost($id: String!, $data: UpdatePostInput!) {
   updatePost(id: $id, data: $data) {
@@ -503,6 +544,8 @@ export const FindAllPostsDocument = gql`
     user {
       id
       username
+      name
+      avatar
     }
     isLiked
     likes

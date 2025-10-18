@@ -9,6 +9,8 @@ query FindAllPosts($filter: FilterPostsInput!) {
     user {
       id
       username
+      name
+      avatar
     }
     isLiked
     likes
