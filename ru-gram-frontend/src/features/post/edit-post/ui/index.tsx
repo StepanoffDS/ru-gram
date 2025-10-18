@@ -59,7 +59,7 @@ export function EditPost({ isOpen, setIsOpen, post }: EditPostProps) {
             text: data.text || '',
           },
         },
-        refetchQueries: ['FindAllPosts'],
+        refetchQueries: ['findAllPosts'],
         awaitRefetchQueries: true,
       });
 

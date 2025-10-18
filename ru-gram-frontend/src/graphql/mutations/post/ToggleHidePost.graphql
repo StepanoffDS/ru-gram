@@ -1,0 +1,6 @@
+mutation ToggleHidePost($postId: String!) {
+  toggleHidePost(postId: $postId) {
+    id
+    hidden
+  }
+}

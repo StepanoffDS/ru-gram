@@ -39,6 +39,7 @@ export class PostsService {
       skip: skip ?? 0,
       where: {
         ...whereClause,
+        hidden: false,
       },
       include: {
         user: true,
@@ -211,6 +212,14 @@ export class PostsService {
 
     if (existingPost.userId !== userId) {
       throw new ForbiddenException('Вы можете редактировать только свои посты');
+    }
+
+    if (
+      updatePostInput.title === '' &&
+      updatePostInput.text === '' &&
+      existingPost.images.length === 0
+    ) {
+      throw new BadRequestException('Пост не может быть пустым');
     }
 
     const post = await this.prismaService.post.update({

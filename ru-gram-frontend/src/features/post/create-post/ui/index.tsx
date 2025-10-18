@@ -78,7 +78,7 @@ export function CreatePost() {
             text: data.text,
           },
         },
-        refetchQueries: ['FindAllPosts'],
+        refetchQueries: ['findAllPosts'],
         awaitRefetchQueries: true,
       });
 
@@ -142,7 +142,7 @@ export function CreatePost() {
     <>
       <div
         onClick={() => setIsOpen(true)}
-        className='flex items-center gap-2'
+        className='flex w-full items-center gap-2'
       >
         <PlusIcon />
         <span>Создать</span>

@@ -5,18 +5,16 @@ import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { Post } from '@/entities/post';
-import {
-  useFindAllPostsQuery,
-  type FindAllPostsQuery,
-} from '@/graphql/generated/output';
+import { useFindAllPostsQuery } from '@/graphql/generated/output';
 import { PostSortOrder } from '@/shared/constants/post-sort';
+import { ListPost } from '@/shared/libs/types';
+
+const POSTS_PER_PAGE = 15;
 
 export function PostsList() {
-  const [posts, setPosts] = useState<FindAllPostsQuery['findAllPosts']>([]);
+  const [posts, setPosts] = useState<ListPost[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [currentSkip, setCurrentSkip] = useState(0);
-
-  const POSTS_PER_PAGE = 1;
 
   const { ref, inView } = useInView({
     threshold: 0,
