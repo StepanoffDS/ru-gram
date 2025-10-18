@@ -19,7 +19,7 @@ export function PostDropdown({ post }: { post: PostModel }) {
   const [isEditPostOpen, setIsEditPostOpen] = useState(false);
   const { userId, isAdmin } = useAuth();
   const isOwnedByUser = isPostOwnedByUser({
-    postUserId: post.userId,
+    postUserId: post.user.id,
     currentUserId: userId,
   });
 
@@ -62,6 +62,7 @@ export function PostDropdown({ post }: { post: PostModel }) {
       <EditPost
         isOpen={isEditPostOpen}
         setIsOpen={setIsEditPostOpen}
+        post={post}
       />
     </>
   );

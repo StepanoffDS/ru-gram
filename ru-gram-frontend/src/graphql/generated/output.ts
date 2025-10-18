@@ -244,8 +244,6 @@ export type QueryGetLikedUsersByPostArgs = {
 };
 
 export type UpdatePostInput = {
-  hidden: Scalars['Boolean']['input'];
-  images: Array<Scalars['String']['input']>;
   text: Scalars['String']['input'];
   title: Scalars['String']['input'];
 };

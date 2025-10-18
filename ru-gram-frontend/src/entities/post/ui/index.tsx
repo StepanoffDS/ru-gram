@@ -5,7 +5,7 @@ import { Button } from '@/shared/components/ui/button';
 import { cn } from '@/shared/libs/utils';
 import { formatTimeAgo } from '@/shared/utils/format-time';
 
-import { PostDropdown } from './post-dropdown';
+import { PostDropdown } from './post-dropdown-client';
 import { PostImage } from './post-image';
 
 interface PostProps {

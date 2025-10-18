@@ -4,31 +4,31 @@ import {
 } from '@/shared/components/ui/alert-dialog';
 import { Button } from '@/shared/components/ui/button';
 
-interface CreatePostFooterProps {
+interface UpdatePostFooterProps {
   setIsOpen: (isOpen: boolean) => void;
   isValid: boolean;
   loading?: boolean;
   uploadProgress?: string;
 }
 
-export function CreatePostFooter({
+export function UpdatePostFooter({
   setIsOpen,
   isValid,
   loading = false,
   uploadProgress = '',
-}: CreatePostFooterProps) {
+}: UpdatePostFooterProps) {
   const handleClose = () => {
     setIsOpen(false);
   };
 
   const getButtonText = () => {
     if (uploadProgress) return uploadProgress;
-    if (loading) return 'Создание...';
-    return 'Создать';
+    if (loading) return 'Обновление...';
+    return 'Обновить';
   };
 
   return (
-    <AlertDialogFooter>
+    <AlertDialogFooter className='mt-2'>
       <AlertDialogCancel
         onClick={handleClose}
         disabled={loading}

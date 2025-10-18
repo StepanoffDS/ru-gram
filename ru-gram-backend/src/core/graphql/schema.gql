@@ -137,8 +137,6 @@ type Query {
 }
 
 input UpdatePostInput {
-  hidden: Boolean!
-  images: [String!]!
   text: String!
   title: String!
 }

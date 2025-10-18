@@ -3,10 +3,10 @@ import {
   AlertDialogTitle,
 } from '@/shared/components/ui/alert-dialog';
 
-export function CreatePostHeader() {
+export function UpdatePostHeader() {
   return (
     <AlertDialogHeader>
-      <AlertDialogTitle>Создать пост</AlertDialogTitle>
+      <AlertDialogTitle>Обновить пост</AlertDialogTitle>
     </AlertDialogHeader>
   );
 }

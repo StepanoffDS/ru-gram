@@ -3,14 +3,14 @@
 import Image from 'next/image';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Edit, PlusIcon, XIcon } from 'lucide-react';
+import { PlusIcon, XIcon } from 'lucide-react';
 import { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { FieldWrapper } from '@/features/auth/ui/field-wrapper';
-import { useCreatePostMutation } from '@/graphql/generated/output';
+import { PostModel, useUpdatePostMutation } from '@/graphql/generated/output';
 import { AuthWarning } from '@/shared/components/auth-warning';
 import {
   AlertDialog,
@@ -30,11 +30,11 @@ import { Textarea } from '@/shared/components/ui/textarea';
 import { addImageToPost } from '@/shared/libs/post-images-api';
 
 import {
-  createPostSchema,
-  type CreatePostSchema,
-} from '../schemas/create-post.schema';
-import { CreatePostFooter } from './footer';
-import { CreatePostHeader } from './header';
+  updatePostSchema,
+  type UpdatePostSchema,
+} from '../schemas/update-post.schema';
+import { UpdatePostFooter } from './footer';
+import { UpdatePostHeader } from './header';
 
 function getImageData(event: ChangeEvent<HTMLInputElement>) {
   const fileList = event.target.files;
@@ -51,82 +51,53 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
 interface EditPostProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  post: PostModel;
 }
 
-export function EditPost({ isOpen, setIsOpen }: EditPostProps) {
+export function EditPost({ isOpen, setIsOpen, post }: EditPostProps) {
   const { isAuthenticated } = useAuth();
-  const [createPost, { loading: createLoading }] = useCreatePostMutation();
+  const [updatePost, { loading: updateLoading }] = useUpdatePostMutation();
   const [uploadLoading, setUploadLoading] = useState(false);
-  const form = useForm<CreatePostSchema>({
-    resolver: zodResolver(createPostSchema),
+  const form = useForm<UpdatePostSchema>({
+    resolver: zodResolver(updatePostSchema),
     defaultValues: {
-      title: '',
-      text: '',
+      title: post.title || '',
+      text: post.text || '',
     },
   });
-  const [preview, setPreview] = useState<string[]>([]);
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+
   const [uploadProgress, setUploadProgress] = useState<string>('');
 
-  const loading = createLoading || uploadLoading;
+  const loading = updateLoading || uploadLoading;
 
-  const onSubmit = async (data: CreatePostSchema) => {
+  const onSubmit = async (data: UpdatePostSchema) => {
     try {
       setUploadLoading(true);
 
-      const { data: postData } = await createPost({
+      const { data: postData } = await updatePost({
         variables: {
+          id: post.id,
           data: {
-            title: data.title,
-            text: data.text,
+            title: data.title || '',
+            text: data.text || '',
           },
         },
       });
 
-      if (!postData?.createPost) {
-        throw new Error('Не удалось создать пост');
+      if (!postData?.updatePost) {
+        throw new Error('Не удалось обновить пост');
       }
 
-      const postId = postData.createPost.id;
-
-      if (imageFiles.length > 0) {
-        for (let i = 0; i < imageFiles.length; i++) {
-          setUploadProgress(
-            `Загрузка изображения ${i + 1} из ${imageFiles.length}...`,
-          );
-
-          await addImageToPost(postId, imageFiles[i]);
-        }
-      }
-
-      toast.success('Пост успешно создан');
+      toast.success('Пост успешно обновлен');
       form.reset();
-      setPreview([]);
-      setImageFiles([]);
       setUploadProgress('');
       setIsOpen(false);
     } catch (error) {
-      console.error('Error creating post:', error);
-      toast.error('Не удалось создать пост');
+      console.error('Error updating post:', error);
+      toast.error('Не удалось обновить пост');
       setUploadProgress('');
     } finally {
       setUploadLoading(false);
-    }
-  };
-
-  const deleteImage = (index: number) => {
-    const newFiles = imageFiles.filter((_, i) => i !== index);
-    const newPreviews = preview.filter((_, i) => i !== index);
-
-    setImageFiles(newFiles);
-    setPreview(newPreviews);
-
-    if (newFiles.length > 0) {
-      const dataTransfer = new DataTransfer();
-      newFiles.forEach((file) => dataTransfer.items.add(file));
-      form.setValue('images', dataTransfer.files);
-    } else {
-      form.setValue('images', undefined);
     }
   };
 
@@ -142,7 +113,7 @@ export function EditPost({ isOpen, setIsOpen }: EditPostProps) {
   return (
     <AlertDialog open={isOpen}>
       <AlertDialogContent>
-        <CreatePostHeader />
+        <UpdatePostHeader />
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -165,74 +136,9 @@ export function EditPost({ isOpen, setIsOpen }: EditPostProps) {
                   placeholder='Текст'
                 />
               </FieldWrapper>
-
-              <FormField
-                control={form.control}
-                name='images'
-                render={({ field: { onChange } }) => (
-                  <FormItem>
-                    <FormLabel>Изображения</FormLabel>
-                    <FormControl>
-                      <div className='custom-scrollbar flex gap-2 overflow-x-auto pb-2'>
-                        <label
-                          htmlFor='images'
-                          className='flex aspect-square h-32 w-32 flex-shrink-0 items-center justify-center rounded-md border border-dashed border-gray-300'
-                        >
-                          <Input
-                            type='file'
-                            multiple
-                            accept='image/*'
-                            id='images'
-                            className='hidden'
-                            onChange={(event) => {
-                              const { files, displayUrls } =
-                                getImageData(event);
-
-                              const newImageFiles = [...imageFiles, ...files];
-                              setPreview([...preview, ...displayUrls]);
-                              setImageFiles(newImageFiles);
-
-                              const dataTransfer = new DataTransfer();
-                              newImageFiles.forEach((file) =>
-                                dataTransfer.items.add(file),
-                              );
-                              onChange(dataTransfer.files);
-
-                              event.target.value = '';
-                            }}
-                          />
-                          <PlusIcon />
-                        </label>
-                        {preview.length > 0 &&
-                          preview.map((image, index) => (
-                            <div
-                              key={index}
-                              className='relative h-32 w-32 flex-shrink-0'
-                            >
-                              <Image
-                                src={image}
-                                alt='preview'
-                                className='rounded-md object-cover'
-                                fill
-                              />
-                              <XIcon
-                                className='absolute top-0 right-0 cursor-pointer'
-                                onClick={() => deleteImage(index)}
-                              />
-                            </div>
-                          ))}
-                      </div>
-                    </FormControl>
-                    <FormDescription>
-                      Добавьте изображения к посту
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
 
-            <CreatePostFooter
+            <UpdatePostFooter
               setIsOpen={setIsOpen}
               isValid={!loading}
               loading={loading}
