@@ -35,7 +35,7 @@ export function LoginAccountForm({
 }) {
   const t = useTranslations('auth.login');
   const router = useRouter();
-  const { auth, setRole } = useAuth();
+  const { auth, setRole, setUserId } = useAuth();
   const form = useForm<LoginAccountSchema>({
     resolver: zodResolver(loginAccountSchema),
     defaultValues: {
@@ -49,6 +49,7 @@ export function LoginAccountForm({
     onCompleted: (data) => {
       auth();
       setRole(data.loginUser.role as Role);
+      setUserId(data.loginUser.id);
       toast.success(t('successMessage'));
       router.push('/');
     },

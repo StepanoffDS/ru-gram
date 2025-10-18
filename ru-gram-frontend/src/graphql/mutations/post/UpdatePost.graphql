@@ -1,0 +1,20 @@
+mutation UpdatePost($id: String!, $data: UpdatePostInput!) {
+  updatePost(id: $id, data: $data) {
+    id
+    title
+    text
+    images
+    hidden
+    likes
+    isLiked
+    userId
+    user {
+      id
+      username
+      name
+      avatar
+    }
+    createdAt
+    updatedAt
+  }
+}

@@ -11,7 +11,7 @@ import * as Upload from 'graphql-upload/Upload.js';
 import { type Prisma } from 'prisma/generated';
 import { StorageService } from '../libs/storage/storage.service';
 import { CreatePostInput } from './inputs/create-post.input';
-import { FilterPostsInput } from './inputs/filter.input';
+import { FilterPostsInput, PostSortOrder } from './inputs/filter.input';
 import { LikesPaginationInput } from './inputs/likes-pagination.input';
 import { UpdatePostInput } from './inputs/update-post.input';
 
@@ -26,11 +26,13 @@ export class PostsService {
     filterPostsInput: FilterPostsInput = {},
     userId?: string,
   ) {
-    const { take, skip, searchTerm } = filterPostsInput;
+    const { take, skip, searchTerm, sortBy } = filterPostsInput;
 
     const whereClause = searchTerm
       ? this.findBySearchTermFilter(searchTerm)
       : undefined;
+
+    const orderBy = this.getOrderByClause(sortBy);
 
     const posts = await this.prismaService.post.findMany({
       take: take ?? 15,
@@ -41,23 +43,36 @@ export class PostsService {
       include: {
         user: true,
       },
-      orderBy: {
-        id: 'asc',
-      },
+      orderBy,
     });
-
-    const shuffledPosts = this.shuffleArray(posts);
 
     if (userId) {
       return Promise.all(
-        shuffledPosts.map(async (post) => ({
+        posts.map(async (post) => ({
           ...post,
           isLiked: await this.isPostLikedByUser(post.id, userId),
         })),
       );
     }
 
-    return shuffledPosts;
+    return posts;
+  }
+
+  private getOrderByClause(
+    sortBy?: PostSortOrder,
+  ): Prisma.PostOrderByWithRelationInput {
+    switch (sortBy) {
+      case PostSortOrder.NEWEST:
+        return { createdAt: 'desc' };
+      case PostSortOrder.OLDEST:
+        return { createdAt: 'asc' };
+      case PostSortOrder.MOST_LIKED:
+        return { likes: 'desc' };
+      case PostSortOrder.LEAST_LIKED:
+        return { likes: 'asc' };
+      default:
+        return { createdAt: 'desc' };
+    }
   }
 
   private findBySearchTermFilter(searchTerm: string): Prisma.PostWhereInput {
@@ -294,15 +309,6 @@ export class PostsService {
     });
 
     return !!like;
-  }
-
-  private shuffleArray<T>(array: T[]): T[] {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
   }
 
   public async toggleHide(postId: string, userId: string) {

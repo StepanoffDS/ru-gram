@@ -1,8 +1,8 @@
-import { MainSidebar } from '@/entities/sidebar';
 import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/shared/components/ui/sidebar';
+import { MainSidebar } from '@/widget/sidebar';
 
 export default async function RootLayout({
   children,

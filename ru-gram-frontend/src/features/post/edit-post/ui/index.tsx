@@ -3,7 +3,7 @@
 import Image from 'next/image';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PlusIcon, XIcon } from 'lucide-react';
+import { Edit, PlusIcon, XIcon } from 'lucide-react';
 import { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -36,11 +36,6 @@ import {
 import { CreatePostFooter } from './footer';
 import { CreatePostHeader } from './header';
 
-interface CreatePostProps {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-}
-
 function getImageData(event: ChangeEvent<HTMLInputElement>) {
   const fileList = event.target.files;
   if (!fileList || fileList.length === 0) {
@@ -53,8 +48,12 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
   return { files, displayUrls };
 }
 
-// TODO: сделать функционал хранения данных создаваемого поста в сторе
-export function CreatePost({ isOpen, setIsOpen }: CreatePostProps) {
+interface EditPostProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
+
+export function EditPost({ isOpen, setIsOpen }: EditPostProps) {
   const { isAuthenticated } = useAuth();
   const [createPost, { loading: createLoading }] = useCreatePostMutation();
   const [uploadLoading, setUploadLoading] = useState(false);

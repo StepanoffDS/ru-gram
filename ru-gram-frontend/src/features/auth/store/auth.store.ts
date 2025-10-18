@@ -11,6 +11,8 @@ export const authStore = create(
       setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
       role: Role.USER,
       setRole: (role) => set({ role }),
+      userId: null,
+      setUserId: (userId) => set({ userId }),
     }),
     {
       name: 'auth-store',

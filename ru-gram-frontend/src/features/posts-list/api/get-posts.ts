@@ -1,3 +1,5 @@
+import { PostSortOrder } from '@/shared/constants/post-sort';
+
 export async function getPosts() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}`, {
     method: 'POST',
@@ -26,6 +28,7 @@ export async function getPosts() {
       variables: {
         filter: {
           take: 10,
+          sortBy: PostSortOrder.NEWEST,
         },
       },
     }),
