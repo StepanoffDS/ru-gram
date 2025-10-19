@@ -87,11 +87,9 @@ type Mutation {
   deletePost(id: String!): Boolean!
   loginUser(data: LoginInput!): UserModel!
   logoutUser: String!
-  removeProfileAvatar: Boolean!
   toggleHidePost(postId: String!): PostModel!
   toggleLikePost(postId: String!): LikeResponseModel!
   updatePost(data: UpdatePostInput!, id: String!): PostModel!
-  updateProfileAvatar(avatar: Upload!): Boolean!
 }
 
 type PaginatedLikedUsersModel {
@@ -135,16 +133,16 @@ type Query {
   findAllUsers(filter: FilterUsersInput!): [UserModel!]!
   findMe: UserModel!
   findOneById(id: String!): PostModel!
-  getLikedUsersByPost(pagination: LikesPaginationInput! = {skip: 0, take: 20}, postId: String!): PaginatedLikedUsersModel!
+  getLikedUsersByPost(
+    pagination: LikesPaginationInput! = { skip: 0, take: 20 }
+    postId: String!
+  ): PaginatedLikedUsersModel!
 }
 
 input UpdatePostInput {
   text: String!
   title: String!
 }
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 type UserModel {
   avatar: String

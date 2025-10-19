@@ -1,5 +1,6 @@
 import { PrismaService } from '@/core/prisma/prisma.service';
 import { StorageService } from '@/modules/libs/storage/storage.service';
+import { PostImageUtil } from '@/shared/utils/post-image.util';
 import {
   BadRequestException,
   Injectable,
@@ -17,18 +18,16 @@ export class ProfileService {
     private readonly storageService: StorageService,
   ) {}
 
-  public async updateAvatar(user: User, file: Upload) {
+  public async updateAvatar(user: User, file: Express.Multer.File) {
     if (user.avatar) {
       await this.storageService.deleteFile(user.avatar);
     }
 
-    const chunks: Buffer[] = [];
+    PostImageUtil.validateImage(file.mimetype, file.size, 0);
 
-    for await (const chunk of file.createReadStream()) {
-      chunks.push(chunk);
-    }
-
-    const buffer = Buffer.concat(chunks);
+    const buffer = file.buffer;
+    const isGif = PostImageUtil.isGif(file.mimetype);
+    const processedBuffer = await PostImageUtil.processImage(buffer, isGif);
 
     const fileName = `/users/${user.id}.webp`;
 
