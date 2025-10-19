@@ -1,0 +1,10 @@
+query FindMe {
+  findMe {
+    id
+    username
+    name
+    avatar
+    bio
+    role
+  }
+}

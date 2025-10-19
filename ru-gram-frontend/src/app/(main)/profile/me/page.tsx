@@ -3,15 +3,21 @@
 import { RefObject, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { PostsList } from '@/entities/posts-list';
-import { useFindAllPostsQuery } from '@/graphql/generated/output';
+import { ProfileInfo } from '@/entities/profile-info';
+import { ProfilePostsList } from '@/entities/profile-posts-list';
+import {
+  useFindAllByMeQuery,
+  useFindMeQuery,
+} from '@/graphql/generated/output';
 import {
   POSTS_PER_PAGE,
   PostSortOrder,
 } from '@/shared/constants/post.constants';
 import { ListPost } from '@/shared/libs/types';
 
-export default function MainPage() {
+export default function ProfileMePage() {
+  const { data: meData, loading: meLoading, error: meError } = useFindMeQuery();
+
   const [posts, setPosts] = useState<ListPost[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [currentSkip, setCurrentSkip] = useState(0);
@@ -21,7 +27,12 @@ export default function MainPage() {
     rootMargin: '100px',
   });
 
-  const { data, loading, error, fetchMore } = useFindAllPostsQuery({
+  const {
+    data: postsData,
+    loading: postsLoading,
+    error: postsError,
+    fetchMore: fetchMorePosts,
+  } = useFindAllByMeQuery({
     variables: {
       filter: {
         take: POSTS_PER_PAGE,
@@ -32,16 +43,16 @@ export default function MainPage() {
   });
 
   useEffect(() => {
-    if (data?.findAllPosts) {
-      setPosts(data.findAllPosts);
+    if (postsData?.findAllByMe) {
+      setPosts(postsData?.findAllByMe);
       setCurrentSkip(POSTS_PER_PAGE);
-      setHasMore(data.findAllPosts.length === POSTS_PER_PAGE);
+      setHasMore(postsData?.findAllByMe?.length === POSTS_PER_PAGE);
     }
-  }, [data]);
+  }, [postsData]);
 
   useEffect(() => {
-    if (inView && hasMore && !loading) {
-      fetchMore({
+    if (inView && hasMore && !postsLoading) {
+      fetchMorePosts({
         variables: {
           filter: {
             take: POSTS_PER_PAGE,
@@ -52,7 +63,7 @@ export default function MainPage() {
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev;
 
-          const newPosts = fetchMoreResult.findAllPosts || [];
+          const newPosts = fetchMoreResult.findAllByMe || [];
           const allPosts = [...posts, ...newPosts];
 
           setPosts(allPosts);
@@ -60,20 +71,27 @@ export default function MainPage() {
           setHasMore(newPosts.length === POSTS_PER_PAGE);
 
           return {
-            findAllPosts: allPosts,
+            findAllByMe: allPosts,
           };
         },
       });
     }
-  }, [inView, hasMore, loading, currentSkip, posts, fetchMore]);
+  }, [inView, hasMore, postsLoading, currentSkip, posts, fetchMorePosts]);
 
   return (
-    <PostsList
-      posts={posts}
-      loading={loading}
-      error={error as Error}
-      hasMore={hasMore}
-      ref={ref as unknown as RefObject<HTMLDivElement>}
-    />
+    <div className='flex flex-col gap-4'>
+      <ProfileInfo
+        profile={meData?.findMe}
+        loading={meLoading}
+        error={meError}
+      />
+      <ProfilePostsList
+        posts={posts}
+        loading={postsLoading}
+        error={postsError as Error}
+        hasMore={hasMore}
+        ref={ref as unknown as RefObject<HTMLDivElement>}
+      />
+    </div>
   );
 }

@@ -128,6 +128,8 @@ type PostModel {
 }
 
 type Query {
+  findAllByMe(filter: FilterPostsInput!): [PostModel!]!
+  findAllByMeHidden(filter: FilterPostsInput!): [PostModel!]!
   findAllByUsername(filter: FilterPostsInput!, username: String!): [PostModel!]!
   findAllPosts(filter: FilterPostsInput!): [PostModel!]!
   findAllUsers(filter: FilterUsersInput!): [UserModel!]!

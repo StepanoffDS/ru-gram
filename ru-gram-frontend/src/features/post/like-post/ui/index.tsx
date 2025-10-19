@@ -31,7 +31,7 @@ export function LikePost({ postId, isLiked, likes }: LikePostProps) {
     <Button
       variant='ghost'
       size='sm'
-      className='flex items-center gap-2 text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400'
+      className='flex cursor-pointer items-center gap-2 text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400'
       onClick={handleToggleLike}
     >
       {isLikedPost ? (

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { PlusIcon, UserIcon } from 'lucide-react';
+import { HomeIcon, PlusIcon, UserIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { CreatePost } from '@/features/post/create-post';
@@ -41,6 +41,19 @@ export function MainSidebar() {
                 Создать
               </SidebarMenuButton>
             </SidebarMenuItem>
+
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                size='lg'
+                asChild={true}
+              >
+                <Link href='/'>
+                  <HomeIcon className='size-4' />
+                  Главная
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
             <SidebarMenuItem>
               <SidebarMenuButton
                 size='lg'

@@ -142,116 +142,107 @@ export function CreatePost({ isOpen, setIsOpen }: CreatePostProps) {
   }
 
   return (
-    <>
-      <div
-        onClick={() => setIsOpen(true)}
-        className='flex w-full items-center gap-2'
-      >
-        <PlusIcon />
-        <span>Создать</span>
-      </div>
-      <AlertDialog open={isOpen}>
-        <AlertDialogContent>
-          <CreatePostHeader />
+    <AlertDialog open={isOpen}>
+      <AlertDialogContent>
+        <CreatePostHeader />
 
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className='space-y-4'>
-                <FieldWrapper
-                  label='Заголовок'
-                  name='title'
-                >
-                  <Input
-                    {...form.register('title')}
-                    placeholder='Заголовок'
-                  />
-                </FieldWrapper>
-                <FieldWrapper
-                  label='Текст'
-                  name='text'
-                >
-                  <Textarea
-                    {...form.register('text')}
-                    placeholder='Текст'
-                  />
-                </FieldWrapper>
-
-                <FormField
-                  control={form.control}
-                  name='images'
-                  render={({ field: { onChange } }) => (
-                    <FormItem>
-                      <FormLabel>Изображения</FormLabel>
-                      <FormControl>
-                        <div className='custom-scrollbar flex gap-2 overflow-x-auto pb-2'>
-                          <label
-                            htmlFor='images'
-                            className='flex aspect-square h-32 w-32 flex-shrink-0 items-center justify-center rounded-md border border-dashed border-gray-300'
-                          >
-                            <Input
-                              type='file'
-                              multiple
-                              accept='image/*'
-                              id='images'
-                              className='hidden'
-                              onChange={(event) => {
-                                const { files, displayUrls } =
-                                  getImageData(event);
-
-                                const newImageFiles = [...imageFiles, ...files];
-                                setPreview([...preview, ...displayUrls]);
-                                setImageFiles(newImageFiles);
-
-                                const dataTransfer = new DataTransfer();
-                                newImageFiles.forEach((file) =>
-                                  dataTransfer.items.add(file),
-                                );
-                                onChange(dataTransfer.files);
-
-                                event.target.value = '';
-                              }}
-                            />
-                            <PlusIcon />
-                          </label>
-                          {preview.length > 0 &&
-                            preview.map((image, index) => (
-                              <div
-                                key={index}
-                                className='relative h-32 w-32 flex-shrink-0'
-                              >
-                                <Image
-                                  src={image}
-                                  alt='preview'
-                                  className='rounded-md object-cover'
-                                  fill
-                                />
-                                <XIcon
-                                  className='absolute top-0 right-0 cursor-pointer'
-                                  onClick={() => deleteImage(index)}
-                                />
-                              </div>
-                            ))}
-                        </div>
-                      </FormControl>
-                      <FormDescription>
-                        Добавьте изображения к посту
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className='space-y-4'>
+              <FieldWrapper
+                label='Заголовок'
+                name='title'
+              >
+                <Input
+                  {...form.register('title')}
+                  placeholder='Заголовок'
                 />
-              </div>
+              </FieldWrapper>
+              <FieldWrapper
+                label='Текст'
+                name='text'
+              >
+                <Textarea
+                  {...form.register('text')}
+                  placeholder='Текст'
+                />
+              </FieldWrapper>
 
-              <CreatePostFooter
-                setIsOpen={setIsOpen}
-                isValid={!loading}
-                loading={loading}
-                uploadProgress={uploadProgress}
+              <FormField
+                control={form.control}
+                name='images'
+                render={({ field: { onChange } }) => (
+                  <FormItem>
+                    <FormLabel>Изображения</FormLabel>
+                    <FormControl>
+                      <div className='custom-scrollbar flex gap-2 overflow-x-auto pb-2'>
+                        <label
+                          htmlFor='images'
+                          className='flex aspect-square h-32 w-32 flex-shrink-0 items-center justify-center rounded-md border border-dashed border-gray-300'
+                        >
+                          <Input
+                            type='file'
+                            multiple
+                            accept='image/*'
+                            id='images'
+                            className='hidden'
+                            onChange={(event) => {
+                              const { files, displayUrls } =
+                                getImageData(event);
+
+                              const newImageFiles = [...imageFiles, ...files];
+                              setPreview([...preview, ...displayUrls]);
+                              setImageFiles(newImageFiles);
+
+                              const dataTransfer = new DataTransfer();
+                              newImageFiles.forEach((file) =>
+                                dataTransfer.items.add(file),
+                              );
+                              onChange(dataTransfer.files);
+
+                              event.target.value = '';
+                            }}
+                          />
+                          <PlusIcon />
+                        </label>
+                        {preview.length > 0 &&
+                          preview.map((image, index) => (
+                            <div
+                              key={index}
+                              className='relative h-32 w-32 flex-shrink-0'
+                            >
+                              <Image
+                                src={image}
+                                alt='preview'
+                                className='rounded-md object-cover'
+                                fill
+                              />
+                              <XIcon
+                                className='absolute top-0 right-0 cursor-pointer'
+                                onClick={() => deleteImage(index)}
+                              />
+                            </div>
+                          ))}
+                      </div>
+                    </FormControl>
+                    <FormDescription>
+                      Добавьте изображения к посту
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </form>
-          </Form>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
+            </div>
+
+            <CreatePostFooter
+              setIsOpen={setIsOpen}
+              isValid={!loading}
+              loading={loading}
+              uploadProgress={uploadProgress}
+            />
+          </form>
+        </Form>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

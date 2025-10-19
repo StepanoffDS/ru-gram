@@ -1,0 +1,20 @@
+query FindAllByUsername($filter: FilterPostsInput!, $username: String!) {
+  findAllByUsername(filter: $filter, username: $username) {
+    id
+    title
+    text
+    images
+    createdAt
+    updatedAt
+    isLiked
+    likes
+    user {
+      id
+      username
+      name
+      avatar
+      bio
+      role
+    }
+  }
+}

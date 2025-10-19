@@ -11,3 +11,5 @@ export const POST_SORT_OPTIONS = [
   { value: PostSortOrder.MOST_LIKED, label: 'Больше лайков' },
   { value: PostSortOrder.LEAST_LIKED, label: 'Меньше лайков' },
 ] as const;
+
+export const POSTS_PER_PAGE = 15;

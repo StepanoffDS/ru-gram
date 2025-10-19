@@ -142,8 +142,96 @@ export class PostsService {
     const posts = await this.prismaService.post.findMany({
       where: {
         ...whereClause,
+        hidden: false,
         user: {
           username: username,
+        },
+      },
+      include: {
+        user: true,
+      },
+      take: take ?? 15,
+      skip: skip ?? 0,
+      orderBy: {
+        id: 'asc',
+      },
+    });
+
+    if (userId) {
+      return Promise.all(
+        posts.map(async (post) => ({
+          ...post,
+          isLiked: await this.isPostLikedByUser(post.id, userId),
+        })),
+      );
+    }
+
+    return posts;
+  }
+
+  public async findAllByMe(
+    userId: string,
+    filterPostsInput: FilterPostsInput = {},
+  ) {
+    const { take, skip, searchTerm } = filterPostsInput;
+
+    const whereClause = searchTerm
+      ? this.findBySearchTermFilter(searchTerm)
+      : undefined;
+
+    const posts = await this.prismaService.post.findMany({
+      where: {
+        ...whereClause,
+        hidden: false,
+        user: {
+          id: userId,
+        },
+      },
+      include: {
+        user: true,
+      },
+      take: take ?? 15,
+      skip: skip ?? 0,
+      orderBy: {
+        id: 'asc',
+      },
+    });
+
+    if (userId) {
+      return Promise.all(
+        posts.map(async (post) => ({
+          ...post,
+          isLiked: await this.isPostLikedByUser(post.id, userId),
+        })),
+      );
+    }
+
+    return posts;
+  }
+
+  public async findAllByMeHidden(
+    userId: string,
+    filterPostsInput: FilterPostsInput = {},
+  ) {
+    const { take, skip, searchTerm } = filterPostsInput;
+
+    // Проверяем, что userId передан и не пустой
+    if (!userId) {
+      throw new ForbiddenException(
+        'Необходима авторизация для просмотра скрытых постов',
+      );
+    }
+
+    const whereClause = searchTerm
+      ? this.findBySearchTermFilter(searchTerm)
+      : undefined;
+
+    const posts = await this.prismaService.post.findMany({
+      where: {
+        ...whereClause,
+        hidden: true,
+        user: {
+          id: userId,
         },
       },
       include: {

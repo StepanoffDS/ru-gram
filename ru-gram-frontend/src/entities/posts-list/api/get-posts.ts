@@ -1,4 +1,4 @@
-import { PostSortOrder } from '@/shared/constants/post-sort';
+import { PostSortOrder } from '@/shared/constants/post.constants';
 
 export async function getPosts() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}`, {

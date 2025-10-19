@@ -1,0 +1,18 @@
+query FindAllByMe($filter: FilterPostsInput!) {
+  findAllByMe(filter: $filter) {
+    id
+    title
+    text
+    images
+    createdAt
+    updatedAt
+    isLiked
+    likes
+    user {
+      id
+      username
+      name
+      avatar
+    }
+  }
+}

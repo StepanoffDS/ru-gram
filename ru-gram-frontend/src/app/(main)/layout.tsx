@@ -14,7 +14,7 @@ export default async function RootLayout({
       <MainSidebar />
       <main className='relative flex-1'>
         <SidebarTrigger />
-        {children}
+        <div className='mr-[10vw] ml-[15vw]'>{children}</div>
       </main>
     </SidebarProvider>
   );

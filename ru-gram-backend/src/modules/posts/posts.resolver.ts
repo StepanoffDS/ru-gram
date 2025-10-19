@@ -44,6 +44,26 @@ export class PostsResolver {
     );
   }
 
+  @Auth()
+  @Query(() => [PostModel], { name: 'findAllByMe' })
+  public async findAllByMe(
+    @Args('filter') filterPostsInput: FilterPostsInput,
+    @Authorized() user: any,
+  ) {
+    const userId = user.id;
+    return this.postsService.findAllByMe(userId, filterPostsInput);
+  }
+
+  @Auth()
+  @Query(() => [PostModel], { name: 'findAllByMeHidden' })
+  public async findAllByMeHidden(
+    @Args('filter') filterPostsInput: FilterPostsInput,
+    @Authorized() user: any,
+  ) {
+    const userId = user.id;
+    return this.postsService.findAllByMeHidden(userId, filterPostsInput);
+  }
+
   @Query(() => PaginatedLikedUsersModel, { name: 'getLikedUsersByPost' })
   public async getLikedUsersByPost(
     @Args('postId') postId: string,
