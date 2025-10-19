@@ -48,10 +48,13 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
   return { files, displayUrls };
 }
 
+interface CreatePostProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
 // TODO: сделать функционал хранения данных создаваемого поста в сторе
-export function CreatePost() {
+export function CreatePost({ isOpen, setIsOpen }: CreatePostProps) {
   const { isAuthenticated } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
   const [createPost, { loading: createLoading }] = useCreatePostMutation();
   const [uploadLoading, setUploadLoading] = useState(false);
   const form = useForm<CreatePostSchema>({
