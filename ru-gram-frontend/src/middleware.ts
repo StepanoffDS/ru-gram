@@ -2,20 +2,20 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 export default function middleware(req: NextRequest) {
   const session = req.cookies.get('session')?.value;
-  const isAuthPage =
-    req.url.includes('/login') || req.url.includes('/register');
+  const { pathname } = req.nextUrl;
 
-  const isAccountPage = req.url.includes('/account');
+  const isAuthPage =
+    pathname.startsWith('/login') || pathname.startsWith('/register');
 
   if (isAuthPage && session) {
     return NextResponse.redirect(new URL('/', req.url));
   }
 
-  if (isAccountPage && !session) {
+  if (!isAuthPage && !session) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 }
 
 export const config = {
-  matcher: ['/account/:path*', '/login', '/register'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|public).*)'],
 };
