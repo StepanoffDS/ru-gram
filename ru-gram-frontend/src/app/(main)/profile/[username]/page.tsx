@@ -1,4 +1,4 @@
-import { ProfilePageComponent } from '@/app/pages/profile';
+import { ProfilePageComponent } from '@/views/profile';
 
 export default async function ProfilePage({
   params,

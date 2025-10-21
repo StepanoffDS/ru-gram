@@ -359,6 +359,13 @@ export type FindAllPostsQueryVariables = Exact<{
 
 export type FindAllPostsQuery = { __typename?: 'Query', findAllPosts: Array<{ __typename?: 'PostModel', id: string, title?: string | null, text?: string | null, images?: Array<string> | null, createdAt: any, updatedAt: any, isLiked?: boolean | null, likes: number, user: { __typename?: 'UserModel', id: string, username: string, name?: string | null, avatar?: string | null } }> };
 
+export type FindAllUsersQueryVariables = Exact<{
+  filter: FilterUsersInput;
+}>;
+
+
+export type FindAllUsersQuery = { __typename?: 'Query', findAllUsers: Array<{ __typename?: 'UserModel', id: string, email: string, username: string, name?: string | null, avatar?: string | null, bio?: string | null, role: string, createdAt: any, updatedAt: any }> };
+
 export type FindMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -895,6 +902,54 @@ export type FindAllPostsQueryHookResult = ReturnType<typeof useFindAllPostsQuery
 export type FindAllPostsLazyQueryHookResult = ReturnType<typeof useFindAllPostsLazyQuery>;
 export type FindAllPostsSuspenseQueryHookResult = ReturnType<typeof useFindAllPostsSuspenseQuery>;
 export type FindAllPostsQueryResult = Apollo.QueryResult<FindAllPostsQuery, FindAllPostsQueryVariables>;
+export const FindAllUsersDocument = gql`
+    query FindAllUsers($filter: FilterUsersInput!) {
+  findAllUsers(filter: $filter) {
+    id
+    email
+    username
+    name
+    avatar
+    bio
+    role
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useFindAllUsersQuery__
+ *
+ * To run a query within a React component, call `useFindAllUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAllUsersQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useFindAllUsersQuery(baseOptions: Apollo.QueryHookOptions<FindAllUsersQuery, FindAllUsersQueryVariables> & ({ variables: FindAllUsersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindAllUsersQuery, FindAllUsersQueryVariables>(FindAllUsersDocument, options);
+      }
+export function useFindAllUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAllUsersQuery, FindAllUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindAllUsersQuery, FindAllUsersQueryVariables>(FindAllUsersDocument, options);
+        }
+export function useFindAllUsersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindAllUsersQuery, FindAllUsersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindAllUsersQuery, FindAllUsersQueryVariables>(FindAllUsersDocument, options);
+        }
+export type FindAllUsersQueryHookResult = ReturnType<typeof useFindAllUsersQuery>;
+export type FindAllUsersLazyQueryHookResult = ReturnType<typeof useFindAllUsersLazyQuery>;
+export type FindAllUsersSuspenseQueryHookResult = ReturnType<typeof useFindAllUsersSuspenseQuery>;
+export type FindAllUsersQueryResult = Apollo.QueryResult<FindAllUsersQuery, FindAllUsersQueryVariables>;
 export const FindMeDocument = gql`
     query FindMe {
   findMe {

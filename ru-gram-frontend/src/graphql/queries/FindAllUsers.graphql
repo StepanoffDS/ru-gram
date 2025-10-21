@@ -1,0 +1,13 @@
+query FindAllUsers($filter: FilterUsersInput!) {
+  findAllUsers(filter: $filter) {
+    id
+    email
+    username
+    name
+    avatar
+    bio
+    role
+    createdAt
+    updatedAt
+  }
+}

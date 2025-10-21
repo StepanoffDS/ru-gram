@@ -63,11 +63,6 @@ export class AccountService {
             mode: 'insensitive',
           },
         },
-        {
-          role: {
-            equals: searchTerm as Role,
-          },
-        },
       ],
     };
   }

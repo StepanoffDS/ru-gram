@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { HomeIcon, PlusIcon, UserIcon } from 'lucide-react';
+import { HomeIcon, PlusIcon, SearchIcon, UserIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { CreatePost } from '@/features/post/create-post';
@@ -62,6 +62,18 @@ export function MainSidebar() {
                 <Link href='/profile/me'>
                   <UserIcon />
                   Мой профиль
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                size='lg'
+                asChild={true}
+              >
+                <Link href='/search'>
+                  <SearchIcon />
+                  Поиск
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
