@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -23,6 +24,8 @@ import {
 import { Input } from '@/shared/components/ui/input';
 import { Textarea } from '@/shared/components/ui/textarea';
 
+import { AvatarUpload } from './avatar-upload';
+
 const profileEditSchema = z.object({
   name: z.string().min(1, 'Имя обязательно').max(50, 'Имя слишком длинное'),
   username: z
@@ -42,9 +45,10 @@ interface ProfileEditFormProps {
   profile: FindMeQuery['findMe'];
   onSuccess?: () => void;
 }
-// TODO: Add avatar upload
+
 export function ProfileEdit({ profile, onSuccess }: ProfileEditFormProps) {
   const router = useRouter();
+  const [currentAvatar, setCurrentAvatar] = useState(profile.avatar);
 
   const form = useForm<ProfileEditFormData>({
     resolver: zodResolver(profileEditSchema),
@@ -86,42 +90,13 @@ export function ProfileEdit({ profile, onSuccess }: ProfileEditFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className='space-y-6'
       >
-        {/* Аватар */}
         <div className='space-y-4'>
           <FormLabel>Аватар</FormLabel>
-          <div className='flex items-center space-x-4'>
-            <div className='relative'>
-              {!profile.avatar && (
-                <div className='flex h-20 w-20 items-center justify-center rounded-full bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400'>
-                  Нет фото
-                </div>
-              )}
-            </div>
-            <div className='space-y-2'>
-              <input
-                type='file'
-                accept='image/*'
-                className='hidden'
-                id='avatar-upload'
-              />
-              <label
-                htmlFor='avatar-upload'
-                className='inline-flex cursor-pointer items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
-              >
-                Выбрать фото
-              </label>
-              {profile.avatar && (
-                <Button
-                  type='button'
-                  variant='outline'
-                  size='sm'
-                  disabled={isLoading}
-                >
-                  Удалить
-                </Button>
-              )}
-            </div>
-          </div>
+          <AvatarUpload
+            currentAvatar={currentAvatar}
+            onAvatarChange={setCurrentAvatar}
+            disabled={isLoading}
+          />
         </div>
 
         {/* Имя */}

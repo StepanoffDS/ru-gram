@@ -78,6 +78,8 @@ export default function ProfileMePage() {
     }
   }, [inView, hasMore, postsLoading, currentSkip, posts, fetchMorePosts]);
 
+  console.log('meData?.findMe =>', meData?.findMe);
+
   return (
     <div className='flex flex-col gap-4'>
       <ProfileInfo

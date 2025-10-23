@@ -3,10 +3,17 @@ import Link from 'next/link';
 import { Heart } from 'lucide-react';
 
 import { LikePost } from '@/features/post/like-post';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import { Button } from '@/shared/components/ui/button';
+import { S3_URL } from '@/shared/constants/api.constants';
 import { ListPost } from '@/shared/libs/types';
 import { cn } from '@/shared/libs/utils';
 import { formatTimeAgo } from '@/shared/utils/format-time';
+import { getInitials } from '@/shared/utils/get-initials';
 
 import { PostDropdown } from './post-dropdown-client';
 import { PostImage } from './post-image';
@@ -17,6 +24,9 @@ interface PostProps {
 
 export function Post({ post }: PostProps) {
   const { user } = post;
+
+  const displayName = user.name || user.username;
+
   return (
     <article
       className='flex flex-col gap-4 border-b pb-4'
@@ -28,9 +38,19 @@ export function Post({ post }: PostProps) {
             href={`/profile/@${user.username}`}
             className='flex size-10 items-center justify-center overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700'
           >
-            <div className='flex size-full items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500 text-sm font-semibold text-white'>
-              {user.username.charAt(0).toUpperCase()}
-            </div>
+            <Avatar className='h-full w-full'>
+              {user.avatar ? (
+                <AvatarImage
+                  src={S3_URL + user.avatar}
+                  alt={displayName}
+                  className='object-cover'
+                />
+              ) : (
+                <AvatarFallback className='bg-gray-100 text-2xl font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300'>
+                  {getInitials(displayName)}
+                </AvatarFallback>
+              )}
+            </Avatar>
           </Link>
           <div className='flex flex-col'>
             <Link

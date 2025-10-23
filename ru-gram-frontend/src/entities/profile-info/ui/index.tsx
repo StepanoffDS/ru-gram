@@ -13,6 +13,7 @@ import {
 } from '@/shared/components/ui/avatar';
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
+import { S3_URL } from '@/shared/constants/api.constants';
 import { Nullable } from '@/shared/libs/types';
 import { getInitials } from '@/shared/utils/get-initials';
 
@@ -64,14 +65,15 @@ export function ProfileInfo({ profile, loading, error }: ProfileInfoProps) {
             <Avatar className='h-24 w-24'>
               {profile.avatar ? (
                 <AvatarImage
-                  src={profile.avatar}
+                  src={S3_URL + profile.avatar}
                   alt={displayName}
                   className='object-cover'
                 />
-              ) : null}
-              <AvatarFallback className='bg-gray-100 text-2xl font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300'>
-                {getInitials(displayName)}
-              </AvatarFallback>
+              ) : (
+                <AvatarFallback className='bg-gray-100 text-2xl font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300'>
+                  {getInitials(displayName)}
+                </AvatarFallback>
+              )}
             </Avatar>
 
             <div className='min-w-0 flex-1'>

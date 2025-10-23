@@ -10,6 +10,7 @@ import {
 } from '@/shared/components/ui/avatar';
 import { Badge } from '@/shared/components/ui/badge';
 import { Card, CardContent } from '@/shared/components/ui/card';
+import { S3_URL } from '@/shared/constants/api.constants';
 
 interface User {
   id: string;
@@ -56,13 +57,16 @@ export function UserCard({ user }: UserCardProps) {
       <CardContent className='p-4'>
         <div className='flex items-start space-x-4'>
           <Avatar className='h-12 w-12'>
-            <AvatarImage
-              src={user.avatar || ''}
-              alt={user.name || user.username}
-            />
-            <AvatarFallback>
-              {getInitials(user.name || '', user.username)}
-            </AvatarFallback>
+            {user.avatar ? (
+              <AvatarImage
+                src={S3_URL + user.avatar}
+                alt={user.name || user.username}
+              />
+            ) : (
+              <AvatarFallback>
+                {getInitials(user.name || '', user.username)}
+              </AvatarFallback>
+            )}
           </Avatar>
 
           <div className='min-w-0 flex-1'>

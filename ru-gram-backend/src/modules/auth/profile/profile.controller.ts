@@ -12,11 +12,11 @@ import { User } from 'prisma/generated/client';
 import { ProfileService } from './profile.service';
 
 @Auth()
-@Controller('profile')
+@Controller('profile-avatar')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
-  @Post('avatar')
+  @Post('')
   @UseInterceptors(FileInterceptor('avatar'))
   public async updateAvatar(
     @Authorized() user: User,
@@ -25,7 +25,7 @@ export class ProfileController {
     return await this.profileService.updateAvatar(user, file);
   }
 
-  @Delete('avatar')
+  @Delete('')
   public async removeAvatar(@Authorized() user: User) {
     return await this.profileService.removeAvatar(user);
   }

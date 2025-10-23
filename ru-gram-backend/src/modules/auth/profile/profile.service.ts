@@ -29,35 +29,17 @@ export class ProfileService {
     const isGif = PostImageUtil.isGif(file.mimetype);
     const processedBuffer = await PostImageUtil.processImage(buffer, isGif);
 
-    const fileName = `/users/${user.id}.webp`;
+    const filename = `/users/${user.id}.webp`;
 
-    if (file.filename.endsWith('.gif')) {
-      const processedBuffer = await sharp(buffer, { animated: true })
-        .resize(512, 512)
-        .webp()
-        .toBuffer();
-
-      await this.storageService.uploadFile(
-        processedBuffer,
-        fileName,
-        'image/webp',
-      );
-    } else {
-      const processedBuffer = await sharp(buffer)
-        .resize(512, 512)
-        .webp()
-        .toBuffer();
-
-      await this.storageService.uploadFile(
-        processedBuffer,
-        fileName,
-        'image/webp',
-      );
-    }
+    await this.storageService.uploadFile(
+      processedBuffer,
+      filename,
+      'image/webp',
+    );
 
     await this.prismaService.user.update({
       where: { id: user.id },
-      data: { avatar: fileName },
+      data: { avatar: filename },
     });
 
     return true;
