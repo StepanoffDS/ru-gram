@@ -33,20 +33,6 @@ export class PostsController {
     return this.postsService.addImageToPost(postId, userId, file);
   }
 
-  @Put(':postId/images')
-  @UseInterceptors(FilesInterceptor('files', 10))
-  updatePostImages(
-    @Param('postId') postId: string,
-    @Authorized('id') userId: string,
-    @UploadedFiles() files: Express.Multer.File[],
-  ) {
-    if (!files || files.length === 0) {
-      throw new Error('Files are required');
-    }
-
-    return this.postsService.updatePostImages(postId, userId, files);
-  }
-
   @Delete(':postId/images')
   removeImageFromPost(
     @Param('postId') postId: string,
