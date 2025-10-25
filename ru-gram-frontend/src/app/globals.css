@@ -150,29 +150,34 @@
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+  scrollbar-color: oklch(0.5 0 0 / 0.3) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
+  height: 8px;
+  width: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
   border-radius: 10px;
+  margin: 4px 0;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.3);
+  background: oklch(0.5 0 0 / 0.3);
   border-radius: 10px;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
+  background: oklch(0.5 0 0 / 0.5);
+  background-clip: content-box;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:active {
-  background: hsl(var(--muted-foreground) / 0.6);
+  background: oklch(0.5 0 0 / 0.6);
+  background-clip: content-box;
 }
